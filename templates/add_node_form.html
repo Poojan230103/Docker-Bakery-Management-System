@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Docker Bakery System | Add New Node</title>
+      <link rel="stylesheet" href="/static/styles.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+   <body>
+      <div class="wrapper">
+         <div class="title-text">
+            <div class="title login">
+               Add Component
+            </div>
+            <div class="title signup">
+               Add New Image
+            </div>
+         </div>
+         <div class="form-container">
+            <div class="slide-controls">
+               <input type="radio" name="slide" id="login" checked>
+               <input type="radio" name="slide" id="signup">
+               <label for="login" class="slide login">Login</label>
+               <label for="signup" class="slide signup">Signup</label>
+               <div class="slider-tab"></div>
+            </div>
+            <div class="form-inner">
+               <form method="post" class="login">
+                   {% csrf_token %}
+                   <input type="hidden" name="source_type" value="component">
+                   <div class="field">
+                     <input type="number" name="parent" value="from_backend" readonly>
+                  </div>
+                   <div class="field">
+                     <input type="text" placeholder="Repository Name" name="repo_name" required>
+                  </div>
+                   <div class="field">
+                     <input type="text" placeholder="Component Name" name="comp_name" required>
+                  </div>
+                   <div class="field">
+                     <input type="text" placeholder="Tag" name="Tag" required>
+                  </div>
+                  <div class="field btn">
+                     <div class="btn-layer"></div>
+                     <input type="submit" value="Add Component">
+                  </div>
+               </form>
+
+               <form method="post" class="signup">
+                   {% csrf_token %}
+                   <input type="hidden" name="source_type" value="no_component">
+                   <div class="field">
+                     <input type="number" name="parent" value=1 readonly>
+                  </div>
+                  <div class="field">
+                     <input type="text" placeholder="Image Name" name="img_name" required>
+                  </div>
+                   <div class="field">
+                     <input type="text" placeholder="Tag" name="Tag" required>
+                  </div>
+                   <div class="field">
+                     <input type="text" placeholder="Repository Name" name="repo_name" required>
+                  </div>
+                   <div class="field">
+                     <input type="text" placeholder="Dockerfile Path" name="dockerfile_local_path" required>
+                  </div>
+                   <div class="field">
+                     <input type="text" placeholder="Requirements Path" name="requirements_local_path">
+                  </div>
+                  <div class="field btn">
+                     <div class="btn-layer"></div>
+                     <input type="submit" value="Add Image">
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+
+      <script>
+         const loginText = document.querySelector(".title-text .login");
+         const loginForm = document.querySelector("form.login");
+         const loginBtn = document.querySelector("label.login");
+         const signupBtn = document.querySelector("label.signup");
+         const signupLink = document.querySelector("form .signup-link a");
+         signupBtn.onclick = (()=>{
+           loginForm.style.marginLeft = "-50%";
+           loginText.style.marginLeft = "-50%";
+         });
+         loginBtn.onclick = (()=>{
+           loginForm.style.marginLeft = "0%";
+           loginText.style.marginLeft = "0%";
+         });
+         signupLink.onclick = (()=>{
+           signupBtn.click();
+           return false;
+         });
+      </script>
+   </body>
+</html>

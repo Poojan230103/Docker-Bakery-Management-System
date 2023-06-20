@@ -50,8 +50,8 @@ $(function() {
 
   // Add sub level
   $(".js-treeview").on("click", ".level-sub", function() {
-    treeview.addSubLevel($(this));
-    treeview.resetBtnToggle();
+
+    window.location.replace('/add_node')
   });
     // Remove Level
   $(".js-treeview").on("click", ".level-remove", function() {
