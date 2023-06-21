@@ -69,6 +69,22 @@ def convert_to_indian_time(utc_time_zone):
 old_to_mirror = {}
 next_id = records.count_documents({}) + 1
 
+
+def build_component(parameter):
+    response = requests.post("http://127.0.0.1:9000/build", data=parameter)
+    response = response.json()
+    print(response)
+    # polling every 10 seconds
+    parameter = {"job_id": response["job_id"]}
+    while True:
+        response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+        response = response.json()
+        if response["status"] == "Success" or response["status"] == "Failed":
+            print(response["status"])
+            break
+        time.sleep(5)
+
+
 def dfs_newnode(old_child_id, old_par_node, new_par_node):       # building the whole tree structure.
     old_child_node = records.find_one({"_id": old_child_id})
     new_child_node = copy.deepcopy(old_child_node)
@@ -117,19 +133,19 @@ def dfs_newnode(old_child_id, old_par_node, new_par_node):       # building the 
         "component_name": new_child_node["component_name"],
         "tag": new_child_node["tag"],
     }
-
-    response = requests.post("http://127.0.0.1:9000/build", data=parameter)
-    response = response.json()
-    print(response)
-    # polling every 10 seconds
-    parameter = {"job_id": response["job_id"]}
-    while True:
-        response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
-        response = response.json()
-        if response["status"] == "Success" or response["status"] == "Failed":
-            print(response["status"])
-            break
-        time.sleep(10)
+    build_component(parameter)
+    # response = requests.post("http://127.0.0.1:9000/build", data=parameter)
+    # response = response.json()
+    # print(response)
+    # # polling every 10 seconds
+    # parameter = {"job_id": response["job_id"]}
+    # while True:
+    #     response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+    #     response = response.json()
+    #     if response["status"] == "Success" or response["status"] == "Failed":
+    #         print(response["status"])
+    #         break
+    #     time.sleep(10)
 
     new_child_node["created_time"] = new_child_node["last_synced_time"] = new_child_node["last_updated_time"] = str(datetime.now().replace(microsecond=0))
     for child in old_child_node["children"]:
@@ -145,6 +161,7 @@ def dfs_newnode(old_child_id, old_par_node, new_par_node):       # building the 
 
 
 def auto_sync_newnode(repo_name):
+    print("hello Poojan")
     repo_url = f"Poojan230103/{repo_name}"  # to be taken from the config file
     mygit = Github("")
     myrepo = mygit.get_repo(repo_url)
@@ -153,7 +170,7 @@ def auto_sync_newnode(repo_name):
     components = parse_script(script_path)
     for comp in components.keys():
         if records.count_documents({"component_name": comp}) == 0:
-            name = 'docker-bakery-system/' + comp + '1.0'
+            name = 'docker-bakery-system/' + comp + ':1.0'
             new_node = treenode(name)
             new_node._id = records.count_documents({}) + 1
             new_node.repo_name = repo_name  # name of repository
@@ -187,23 +204,23 @@ def auto_sync_newnode(repo_name):
                 "component_name": new_node.component_name,
                 "tag": new_node.tag,
             }
-            response = requests.post("http://127.0.0.1:9000/build", data=parameter)
-            response = response.json()
-            print(response)
-            # polling every 10 seconds
-            parameter = {"job_id": response["job_id"]}
-            while True:
-                response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
-                response = response.json()
-                if response["status"] == "Success" or response["status"] == "Failed":
-                    print(response["status"])
-                    break
-                time.sleep(10)
+            build_component(parameter)
+            # response = requests.post("http://127.0.0.1:9000/build", data=parameter)
+            # response = response.json()
+            # print(response)
+            # # polling every 10 seconds
+            # parameter = {"job_id": response["job_id"]}
+            # while True:
+            #     response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+            #     response = response.json()
+            #     if response["status"] == "Success" or response["status"] == "Failed":
+            #         print(response["status"])
+            #         break
+            #     time.sleep(10)
             json_data = json.dumps(new_node, default=lambda o: o.__dict__, indent=4)
             json_data = json.loads(json_data)
             records.insert_one(json_data)
             records.replace_one({"_id": par["_id"]}, par)
-
 
         else:
             node = records.find_one({"repo_name": repo_name, "component_name": comp}, sort=[("tag", -1)], limit=1)
@@ -254,18 +271,19 @@ def auto_sync_newnode(repo_name):
                     "component_name": new_node["component_name"],
                     "tag": new_node["tag"],
                 }
-                response = requests.post("http://127.0.0.1:9000/build", data=parameter)
-                response = response.json()
-                print(response)
-                # polling every 10 seconds
-                parameter = {"job_id": response["job_id"]}
-                while True:
-                    response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
-                    response = response.json()
-                    if response["status"] == "Success" or response["status"] == "Failed":
-                        print(response["status"])
-                        break
-                    time.sleep(10)
+                build_component(parameter)
+                # response = requests.post("http://127.0.0.1:9000/build", data=parameter)
+                # response = response.json()
+                # print(response)
+                # # polling every 10 seconds
+                # parameter = {"job_id": response["job_id"]}
+                # while True:
+                #     response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+                #     response = response.json()
+                #     if response["status"] == "Success" or response["status"] == "Failed":
+                #         print(response["status"])
+                #         break
+                #     time.sleep(10)
 
                 new_node["sibling"] = node["_id"]  # assigning sibling
                 parent_node = records.find_one({"_id": node["parent"]})
@@ -279,23 +297,25 @@ def auto_sync_newnode(repo_name):
                 records.insert_one(new_node)
                 records.replace_one({"_id": parent_node["_id"]}, parent_node)
             node["last_synced_time"] = str(datetime.now().replace(microsecond=0))
+            records.replace_one({"_id": node["_id"]}, node)
 
 
 def dfs_samenode(node_id):         # recursively re-building the subtree on update of the parent node
     childnode = records.find_one({"_id": node_id})
     if childnode["component_name"]:
         parameter = {"repo_name": childnode["repo_name"], "component_name": childnode["component_name"], "tag": childnode["tag"]}
-        response = requests.post("http://127.0.0.1:9000/build", data=parameter)
-        response = response.json()
-        print(response)
-        parameter = {"job_id": response["job_id"]}
-        while True:
-            response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
-            response = response.json()
-            if response["status"] == "Success" or response["status"] == "Failed":
-                print(response["status"])
-                break
-            time.sleep(10)
+        build_component(parameter)
+        # response = requests.post("http://127.0.0.1:9000/build", data=parameter)
+        # response = response.json()
+        # print(response)
+        # parameter = {"job_id": response["job_id"]}
+        # while True:
+        #     response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+        #     response = response.json()
+        #     if response["status"] == "Success" or response["status"] == "Failed":
+        #         print(response["status"])
+        #         break
+        #     time.sleep(10)
 
         for ids_child in childnode["children"]:
             dfs_samenode(ids_child)
@@ -334,8 +354,8 @@ def autosync_samenode(repo_name):
     script_path = root_path + '/' + repo_name + '/build-component.sh'
     components = parse_script(script_path)
     for comp in components.keys():
-        if records.count_documents({"component_name": comp}) == 0:
-            name = 'docker-bakery-system/' + comp + '1.0'
+        if records.count_documents({"component_name": comp}) == 0:          # adding new component if any
+            name = 'docker-bakery-system/' + comp + ':1.0'
             new_node = treenode(name)
             next_id = records.count_documents({})
             new_node._id = next_id
@@ -371,18 +391,19 @@ def autosync_samenode(repo_name):
                 "component_name": new_node.component_name,
                 "tag": new_node.tag,
             }
-            response = requests.post("http://127.0.0.1:9000/build", data=parameter)
-            response = response.json()
-            print(response)
-            # polling every 10 seconds
-            parameter = {"job_id": response["job_id"]}
-            while True:
-                response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
-                response = response.json()
-                if response["status"] == "Success" or response["status"] == "Failed":
-                    print(response["status"])
-                    break
-                time.sleep(10)
+            build_component(parameter)
+            # response = requests.post("http://127.0.0.1:9000/build", data=parameter)
+            # response = response.json()
+            # print(response)
+            # # polling every 10 seconds
+            # parameter = {"job_id": response["job_id"]}
+            # while True:
+            #     response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+            #     response = response.json()
+            #     if response["status"] == "Success" or response["status"] == "Failed":
+            #         print(response["status"])
+            #         break
+            #     time.sleep(10)
             json_data = json.dumps(new_node, default=lambda o: o.__dict__, indent=4)
             json_data = json.loads(json_data)
             records.insert_one(json_data)
@@ -423,17 +444,18 @@ def autosync_samenode(repo_name):
                              "component_name": node["component_name"],
                              "tag": node["tag"]
                              }
-                response = requests.post("http://127.0.0.1:9000/build", data=parameter)
-                response = response.json()
-                print(response)
-                parameter = {"job_id": response["job_id"]}
-                while True:
-                    response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
-                    response = response.json()
-                    if response["status"] == "Success" or response["status"] == "Failed":
-                        print(response["status"])
-                        break
-                    time.sleep(5)
+                build_component(parameter)
+                # response = requests.post("http://127.0.0.1:9000/build", data=parameter)
+                # response = response.json()
+                # print(response)
+                # parameter = {"job_id": response["job_id"]}
+                # while True:
+                #     response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+                #     response = response.json()
+                #     if response["status"] == "Success" or response["status"] == "Failed":
+                #         print(response["status"])
+                #         break
+                #     time.sleep(5)
 
                 for ids in node["children"]:
                     dfs_samenode(ids)

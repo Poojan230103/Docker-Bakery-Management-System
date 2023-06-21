@@ -1,12 +1,11 @@
-import os
-
+import os, requests, time
 from django.shortcuts import render, redirect
 import pymongo
 import json
 from multiprocessing import Process
 from django.http import HttpResponse
 from myapp.models import treenode, dependencies
-from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, auto_sync_newnode, autosync_samenode
+from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, auto_sync_newnode, autosync_samenode, build_component
 from django.contrib import messages
 
 
@@ -14,7 +13,7 @@ client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.m
 db = client.get_database('myDB')
 records = db['Images']
 
-root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/docker_files'
+root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'
 
 
 def get_data():     # fetches the data from the database and converts it into hierarchical format to display it in UI
@@ -51,7 +50,8 @@ def add_node(request):
             img_name = 'docker-bakery-system/' + comp
             print(repo, comp, tag, img_name)
             if records.count_documents({"img_name": img_name, "tag": float(tag)}):
-                pass    # give an error message
+                messages.error(request, "Image Already Exists")
+                return redirect('/add_node')
             else:
                 sibling = records.find_one({"img_name": img_name}, sort=[("tag", -1)], limit=1)
                 img_tag = img_name + ':' + tag
@@ -71,8 +71,9 @@ def add_node(request):
                     new_dep.deps_local_path = root_path + '/' + repo + '/' + requirements_path
                     new_node.files.append(new_dep)
                 if sibling:
-                    if float(tag) <= sibling["tag"]:
-                        pass    # throw an error that tag should be incremental
+                    if float(tag) <= sibling["tag"]:    # throw an error that tag should be incremental
+                        messages.error(request, "Tag should be incremental")
+                        return redirect('/add_node')
                     else:
                         new_node.sibling = sibling["_id"]
                 new_node._id = records.count_documents({}) + 1
@@ -82,6 +83,26 @@ def add_node(request):
                 parent_node = records.find_one({"_id": int(request.POST['parent'])})
                 parent_node["children"].append(new_node._id)
                 records.replace_one({"_id": int(request.POST['parent'])}, parent_node)
+                #
+                parameter = {
+                    "repo_name": new_node.repo_name,
+                    "component_name": new_node.component_name,
+                    "tag": new_node.tag,
+                }
+                build_component(parameter)
+                # response = requests.post("http://127.0.0.1:9000/build", data=parameter)
+                # response = response.json()
+                # # print(response)
+                # # polling every 10 seconds
+                # parameter = {"job_id": response["job_id"]}
+                # while True:
+                #     response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+                #     response = response.json()
+                #     if response["status"] == "Success" or response["status"] == "Failed":
+                #         print(response["status"])
+                #         break
+                #     time.sleep(10)
+                messages.success(request, "Component Created Successfully.")
         else:
             repo = request.POST['repo_name']
             parent = request.POST['parent']
@@ -90,12 +111,14 @@ def add_node(request):
             img_name = request.POST['img_name']
             dockerfile_local_path = request.POST['dockerfile_local_path']
             requirements_local_path = request.POST['requirements_local_path']
-            if records.find({"img_name": img_name, "tag": float(tag)}):
-                pass    # throw an error that the image already exists
+            if records.find_one({"img_name": img_name, "tag": float(tag)}):    # throw an error that the image already exists
+                messages.error(request, "Image Already Exists")
+                return redirect('/add_node')
             sibling = records.find_one({"img_name": img_name}, sort=[("tag", -1)], limit=1)
             if sibling:
-                if float(tag) <= sibling["tag"]:
-                    pass    # throw an error that tag should be incremental
+                if float(tag) <= sibling["tag"]:        # throw an error that tag should be incremental
+                    messages.error(request, "Tag should be incremental")
+                    return redirect('/add_node')
             new_node = treenode(img_name + ':' + tag)
             new_node.parent = int(parent)
             new_node.dockerfile_local_path = dockerfile_local_path
@@ -114,6 +137,23 @@ def add_node(request):
             parent_node = records.find_one({"_id": int(parent)})
             parent_node["children"].append(new_node._id)
             records.replace_one({"_id": int(parent)}, parent_node)
+            #
+            parameter = {"dockerfile_local_path": new_node.dockerfile_local_path,
+                         "img_name": new_node.img_name,
+                         "tag": new_node.tag}
+            response = requests.post("http://127.0.0.1:9000/build_no_comp", data=parameter)
+            response = response.json()
+            # print(response)
+            # polling every 10 seconds
+            parameter = {"job_id": response["job_id"]}
+            while True:
+                response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
+                response = response.json()
+                if response["status"] == "Success" or response["status"] == "Failed":
+                    print(response["status"])
+                    break
+                time.sleep(10)
+            messages.success(request, "Image Created Successfully.")
 
     return render(request, 'add_node_form.html')
 
@@ -140,3 +180,7 @@ def auto_sync(request):
     p.join()
     messages.info(request, "Auto Sync Completed")
     return redirect('/')
+
+
+
+
