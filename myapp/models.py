@@ -17,6 +17,7 @@ class treenode:
         self.component_name = None
         self.architecture = "arm" if "arm" in img_name else "intel"
         self.files = []
+        self.commit_id = None
 
 
 class dependencies:

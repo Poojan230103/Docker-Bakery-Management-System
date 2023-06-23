@@ -58,7 +58,7 @@ html,body{
   z-index: 1;
   transition: all 0.6s ease;
 }
-.slide-controls label.signup{
+.slide-controls label.new_img{
   color: #000;
 }
 .slide-controls .slider-tab{
@@ -74,21 +74,21 @@ html,body{
 input[type="radio"]{
   display: none;
 }
-#signup:checked ~ .slider-tab{
+#new_img:checked ~ .slider-tab{
   left: 50%;
 }
-#signup:checked ~ label.signup{
+#new_img:checked ~ label.new_img{
   color: #fff;
   cursor: default;
   user-select: none;
 }
-#signup:checked ~ label.login{
+#new_img:checked ~ label.new_comp{
   color: #000;
 }
-#login:checked ~ label.signup{
+#new_comp:checked ~ label.new_img{
   color: #000;
 }
-#login:checked ~ label.login{
+#new_comp:checked ~ label.new_comp{
   cursor: default;
   user-select: none;
 }
@@ -134,17 +134,17 @@ form .field input:focus::placeholder{
 .form-inner form .pass-link{
   margin-top: 5px;
 }
-.form-inner form .signup-link{
+.form-inner form .new_img-link{
   text-align: center;
   margin-top: 30px;
 }
 .form-inner form .pass-link a,
-.form-inner form .signup-link a{
+.form-inner form .new_img-link a{
   color: #fa4299;
   text-decoration: none;
 }
 .form-inner form .pass-link a:hover,
-.form-inner form .signup-link a:hover{
+.form-inner form .new_img-link a:hover{
   text-decoration: underline;
 }
 form .btn{

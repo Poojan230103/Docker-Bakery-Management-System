@@ -12,27 +12,8 @@ $(function() {
         .removeClass("in");
     },
 
-    addSameLevel: function(target) {
-      let ulElm = target.closest("ul");
-      let sameLevelCodeASCII = target
-        .closest("[data-level]")
-        .attr("data-level")
-      ulElm.append($("#levelMarkup").html());
-      ulElm
-        .children("li:last-child")
-        .find("[data-level]")
-        .attr("data-level", sameLevelCodeASCII);
-    },
-    addSubLevel: function(target) {
-      let liElm = target.closest("li");
-      let nextLevelCodeASCII = `${+liElm.find("[data-level]").attr("data-level") + 1}`;
-      liElm.children("ul").append($("#levelMarkup").html());
-      liElm.children("ul").find("[data-level]")
-        .attr("data-level", nextLevelCodeASCII);
-    },
     removeLevel: function(target) {
       target.closest("li").remove();
-
     }
   };
 
@@ -42,17 +23,34 @@ $(function() {
     $(this).siblings().toggleClass("in");
   });
 
-  // Add same level
+  // Upgrade Node
+  $(".js-treeview").on("click", ".upgrade-node", function() {
+    target = $(this);
+    let liElm = target.closest("li");
+    let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
+    let url = '/manual_sync?sync_type=0&node_id=' + node_id
+    window.location.replace(url)
+  });
+
+  // Update Node
   $(".js-treeview").on("click", ".level-same", function() {
-    treeview.addSameLevel($(this));
-    treeview.resetBtnToggle();
+    target = $(this);
+    let liElm = target.closest("li");
+    let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
+    console.log("hello from update " + node_id)
+    let url = '/manual_sync?sync_type=1&node_id=' + node_id
+    window.location.replace(url)
   });
 
-  // Add sub level
+  // Add new Node
   $(".js-treeview").on("click", ".level-sub", function() {
-
-    window.location.replace('/add_node')
+    target = $(this);
+    let liElm = target.closest("li");
+    let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
+    let url = '/add_node?node_id=' + node_id
+    window.location.replace(url)
   });
+
     // Remove Level
   $(".js-treeview").on("click", ".level-remove", function() {
     treeview.removeLevel($(this));

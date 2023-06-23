@@ -9,7 +9,13 @@
    </head>
    <body>
       <div class="wrapper">
-
+      <div class="slide-controls">
+               <input type="radio" name="slide" id="new_comp" checked>
+               <input type="radio" name="slide" id="new_img">
+               <label for="new_comp" class="slide new_comp">Component</label>
+               <label for="new_img" class="slide new_img">Image</label>
+               <div class="slider-tab"></div>
+            </div>
           {% if messages %}
             <ul class="messages">
             {% for message in messages %}
@@ -17,29 +23,29 @@
             {% endfor %}
             </ul>
           {% endif %}
-
          <div class="title-text">
-            <div class="title login">
+            <div class="title new_comp">
                Add Component
             </div>
-            <div class="title signup">
+            <div class="title new_img">
                Add New Image
             </div>
          </div>
          <div class="form-container">
-            <div class="slide-controls">
-               <input type="radio" name="slide" id="login" checked>
-               <input type="radio" name="slide" id="signup">
-               <label for="login" class="slide login">Component</label>
-               <label for="signup" class="slide signup">Image</label>
-               <div class="slider-tab"></div>
-            </div>
+{#            <div class="slide-controls">#}
+{#               <input type="radio" name="slide" id="new_comp" checked>#}
+{#               <input type="radio" name="slide" id="new_img">#}
+{#               <label for="new_comp" class="slide new_comp">Component</label>#}
+{#               <label for="new_img" class="slide new_img">Image</label>#}
+{#               <div class="slider-tab"></div>#}
+{#            </div>#}
             <div class="form-inner">
-               <form method="post" class="login">
+               <form method="post" class="new_comp">
                    {% csrf_token %}
+{#                   if user wants to add new component#}
                    <input type="hidden" name="source_type" value="component">
                    <div class="field">
-                     <input type="number" name="parent" value=1 readonly>
+                     <input type="number" name="parent" value="{{parent_id}}" readonly>
                   </div>
                    <div class="field">
                      <input type="text" placeholder="Repository Name" name="repo_name" required>
@@ -56,11 +62,12 @@
                   </div>
                </form>
 
-               <form method="post" class="signup">
+               <form method="post" class="new_img">
                    {% csrf_token %}
+{#                   if user just wants to store his image#}
                    <input type="hidden" name="source_type" value="no_component">
                    <div class="field">
-                     <input type="number" name="parent" value=1 readonly>
+                     <input type="number" name="parent" value="{{ parent_id }}" readonly>
                   </div>
                   <div class="field">
                      <input type="text" placeholder="Image Name" name="img_name" required>
@@ -69,13 +76,12 @@
                      <input type="text" placeholder="Tag" name="Tag" required>
                   </div>
                    <div class="field">
-                     <input type="text" placeholder="Repository Name" name="repo_name" required>
+{#                     <input type="text" placeholder="Dockerfile Path" name="dockerfile_local_path" required>#}
+                       <textarea name="Dockerfile" rows="2" cols="55"></textarea>
                   </div>
                    <div class="field">
-                     <input type="text" placeholder="Dockerfile Path" name="dockerfile_local_path" required>
-                  </div>
-                   <div class="field">
-                     <input type="text" placeholder="Requirements Path" name="requirements_local_path">
+{#                     <input type="text" placeholder="Requirements Path" name="requirements_local_path">#}
+                       <textarea name="Requirements" rows="2" cols="55"></textarea>
                   </div>
                   <div class="field btn">
                      <div class="btn-layer"></div>
@@ -87,21 +93,21 @@
       </div>
 
       <script>
-         const loginText = document.querySelector(".title-text .login");
-         const loginForm = document.querySelector("form.login");
-         const loginBtn = document.querySelector("label.login");
-         const signupBtn = document.querySelector("label.signup");
-         const signupLink = document.querySelector("form .signup-link a");
-         signupBtn.onclick = (()=>{
-           loginForm.style.marginLeft = "-50%";
-           loginText.style.marginLeft = "-50%";
+         const new_compText = document.querySelector(".title-text .new_comp");
+         const new_compForm = document.querySelector("form.new_comp");
+         const new_compBtn = document.querySelector("label.new_comp");
+         const new_imgBtn = document.querySelector("label.new_img");
+         const new_imgLink = document.querySelector("form .new_img-link a");
+         new_imgBtn.onclick = (()=>{
+           new_compForm.style.marginLeft = "-50%";
+           new_compText.style.marginLeft = "-50%";
          });
-         loginBtn.onclick = (()=>{
-           loginForm.style.marginLeft = "0%";
-           loginText.style.marginLeft = "0%";
+         new_compBtn.onclick = (()=>{
+           new_compForm.style.marginLeft = "0%";
+           new_compText.style.marginLeft = "0%";
          });
-         signupLink.onclick = (()=>{
-           signupBtn.click();
+         new_imgLink.onclick = (()=>{
+           new_imgBtn.click();
            return false;
          });
       </script>

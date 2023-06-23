@@ -57,26 +57,26 @@ fetch('/static/data.json')
 //     return treeview__level;
 // }
 //
-// function parentFunction(jsondata){
+// function parentFunction(json_data){
 //     const treeview = document.getElementsByClassName('treeview js-treeview')[0];
 //     const ul = treeview.firstElementChild;
-//     if(jsondata.length > 1) {
-//         for(rootnode of jsondata) {
+//     if(json_data.length > 1) {
+//         for(rootnode of json_data) {
 //             ul.appendChild(createGeneration(rootnode, '1'));
 //         }
 //     } else {
-//         ul.appendChild(createGeneration(jsondata, '1'));
+//         ul.appendChild(createGeneration(json_data, '1'));
 //     }
 // }
 //
-// function createGeneration(jsondata, level) {
-//     const name = jsondata.img_name + ':' + jsondata.tag + ' ' + `( ${jsondata.sibling==null? '' : jsondata.sibling})`;
+// function createGeneration(json_data, level) {
+//     const name = json_data.img_name + ':' + json_data.tag + ' ' + `( ${json_data.sibling==null? '' : json_data.sibling})`;
 //     const node = createNode(name, level);
 //     const li = document.createElement('li');
 //     li.appendChild(node);
 //     const ul = document.createElement('ul');
-//     if(jsondata.children.length != 0) {
-//         for(child of jsondata.children) {
+//     if(json_data.children.length != 0) {
+//         for(child of json_data.children) {
 //             ul.appendChild(createGeneration(child, `${+level + 1}`));
 //         }
 //     }
@@ -84,11 +84,12 @@ fetch('/static/data.json')
 //     return li;
 // }
 
-function createNode(name, levelCode) {
+function createNode(name, levelCode, node_id) {
     const treeview__level = document.createElement('div');
     treeview__level.addEventListener('click', (event) => hideChildren(event));
     treeview__level.classList.add('treeview__level');
     treeview__level.setAttribute('data-level', levelCode);
+    treeview__level.setAttribute('data-node_id', node_id);
 
     const level_title = document.createElement('span');
     level_title.classList.add('level-title');
@@ -113,8 +114,14 @@ function createNode(name, levelCode) {
     const level_same = document.createElement('div');
     level_same.classList.add('btn', 'btn-default', 'btn-sm', 'level-same');
     const same_level = document.createElement('span');
-    same_level.appendChild(document.createTextNode('Sync'));
+    same_level.appendChild(document.createTextNode('Update Node'));
     level_same.appendChild(same_level);
+
+    const upgrade_node = document.createElement('div');
+    upgrade_node.classList.add('btn', 'btn-default', 'btn-sm', 'upgrade-node');
+    const upgrade = document.createElement('span');
+    upgrade_node.appendChild(document.createTextNode('Upgrade Node'));
+    upgrade_node.appendChild(upgrade);
 
     const level_sub = document.createElement('div');
     level_sub.classList.add('btn', 'btn-default', 'btn-sm', 'level-sub');
@@ -125,6 +132,7 @@ function createNode(name, levelCode) {
     treeview__level_btns.appendChild(level_add);
     treeview__level_btns.appendChild(level_remove);
     treeview__level_btns.appendChild(level_same);
+    treeview__level_btns.appendChild(upgrade_node);
     treeview__level_btns.appendChild(level_sub);
 
     treeview__level.appendChild(level_title);
@@ -142,27 +150,27 @@ function hideChildren(event) {
     else ul.classList.add('hide');
 }
 
-function parentFunction(jsondata){
+function parentFunction(json_data){
     const treeview = document.getElementsByClassName('treeview js-treeview')[0];
     const ul = treeview.firstElementChild;
-    if(jsondata.length > 1) {
-        for(rootnode of jsondata) {
+    if(json_data.length > 1) {
+        for(rootnode of json_data) {
             ul.appendChild(createGeneration(rootnode, '1'));
         }
     } else {
-        ul.appendChild(createGeneration(jsondata, '1'));
+        ul.appendChild(createGeneration(json_data, '1'));
     }
     //treeview.appendChild(details);
 }
 
-function createGeneration(jsondata, level) {
-    const name = jsondata.img_name + ':' + jsondata.tag + ' ' + `(${jsondata.sibling==null? '' : jsondata.sibling})`;
-    const node = createNode(name, level);
+function createGeneration(json_data, level) {
+    const name = json_data.img_name + ':' + json_data.tag + ' ' + `(${json_data.sibling==null? '' : json_data.sibling})`;
+    const node = createNode(name, level, json_data._id);
     const li = document.createElement('li');
     li.appendChild(node);
     const ul = document.createElement('ul');
-    if(jsondata.children.length != 0) {
-        for(child of jsondata.children) {
+    if(json_data.children.length != 0) {
+        for(child of json_data.children) {
             ul.appendChild(createGeneration(child, `${+level + 1}`));
         }
     }

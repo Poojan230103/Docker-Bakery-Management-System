@@ -105,25 +105,29 @@
   display: inline-block;
   position: relative;
 }
-.treeview__level .level-same, .treeview__level .level-sub {
+.treeview__level .level-same, .treeview__level .level-sub, .treeview__level .upgrade-node {
   position: absolute;
   display: none;
   transition: opacity 250ms cubic-bezier(0.7, 0, 0.3, 1);
 }
-.treeview__level .level-same.in, .treeview__level .level-sub.in {
+.treeview__level .level-same.in, .treeview__level .level-sub.in, .treeview__level .upgrade-node.in  {
   display: block;
 }
-.treeview__level .level-same.in .btn-default, .treeview__level .level-sub.in .btn-default {
+.treeview__level .level-same.in .btn-default, .treeview__level .level-sub.in .btn-default, .treeview__level .upgrade-node.in .btn-default {
   background-color: #faeaea;
   color: #da5555;
+}
+.treeview__level. upgrade-node{
+    top: 0px;
+    left: 50px;
 }
 .treeview__level .level-same {
   top: 0;
   left: 45px;
 }
 .treeview__level .level-sub {
-  top: 42px;
-  left: 0px;
+  top: 45px;
+  left: 45px;
 }
 .treeview__level .level-remove {
   display: none;
@@ -138,7 +142,7 @@
 .treeview__level.selected .level-add {
   display: none;
 }
-.treeview__level.selected .level-same, .treeview__level.selected .level-sub {
+.treeview__level.selected .level-same, .treeview__level.selected .level-sub, .treeview__level.selected .upgrade-node  {
   display: none;
 }
 .treeview .level-title {
@@ -167,10 +171,25 @@
 <nav class="navbar navbar-light bg-light justify-content-between">
   <form class="form-inline mx-auto" method="post" action="/manual_sync">
       {% csrf_token %}
-    <input class="form-control mr-sm-2" type="text" placeholder="Repository Name" name="repo_name">
+      <input type="hidden" name="sync_type" value="sync_by_img_name">
+    <input class="form-control mr-sm-4" type="text" placeholder="Image Name" name="img_name">
+      <div class="form-check mr-sm-3">
+      <input class="form-check-input" type="radio" name="sync_type" value=0>
+      <label class="form-check-label">
+        Upgrade Image
+      </label>
+     </div>
+     <div class="form-check mr-sm-3">
+      <input class="form-check-input" type="radio" name="sync_type" value=1>
+      <label class="form-check-label">
+        Update Image
+      </label>
+    </div>
+
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sync</button>
   </form>
 </nav>
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -195,6 +214,7 @@
           <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
           <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
           <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+            <div class="btn btn-default btn-sm upgrade-node"><span>Upgrade Node</span></div>
         </div>
       </div>
       <ul>
