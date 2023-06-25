@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang='en' class=''>
+
+<head>
+
+  <meta charset='UTF-8'>
+  <title>Edit Node</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container text-center">
+    <form method="POST" action="/edit_node">
+        {% csrf_token %}
+        <input type="hidden" name="node_id" value = {{ node_id }}>
+        <div class="row" style="padding: 25px">
+          <h3> Dockerfile </h3>
+          <div class="col">
+              <textarea name="dockerfile" rows="25" cols="80" style="border-radius: 5px;"> {{ dockerfile_contents }} </textarea>
+          </div>
+        </div>
+        <button type="submit"> Edit</button>
+    </form>
+</div>
+
+</body>
+
+

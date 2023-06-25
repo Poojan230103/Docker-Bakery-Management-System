@@ -33,22 +33,33 @@ $(function() {
   });
 
   // Update Node
-  $(".js-treeview").on("click", ".level-same", function() {
+  $(".js-treeview").on("click", ".update-node", function() {
     target = $(this);
     let liElm = target.closest("li");
     let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
-    console.log("hello from update " + node_id)
+    // console.log("hello from update " + node_id)
     let url = '/manual_sync?sync_type=1&node_id=' + node_id
     window.location.replace(url)
   });
 
   // Add new Node
-  $(".js-treeview").on("click", ".level-sub", function() {
+  $(".js-treeview").on("click", ".add-child", function() {
     target = $(this);
     let liElm = target.closest("li");
     let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
     let url = '/add_node?node_id=' + node_id
-    window.location.replace(url)
+    // window.location.replace(url)
+    window.location.href = url
+  });
+
+    // Add new Node
+  $(".js-treeview").on("click", ".edit-node", function() {
+    target = $(this);
+    let liElm = target.closest("li");
+    let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
+    let url = '/edit_node?node_id=' + node_id
+    // window.location.replace(url)
+    window.location.href = url
   });
 
     // Remove Level

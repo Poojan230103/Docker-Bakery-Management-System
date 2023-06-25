@@ -144,5 +144,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRONJOBS = [
-    ('*/1 * * * *', 'myapp.cron.auto_sync')
+    ('*/10 * * * *', 'myapp.cron.auto_sync')
 ]

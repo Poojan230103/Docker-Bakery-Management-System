@@ -10,6 +10,7 @@ class treenode:
         self.children = []
         self.parent = None
         self.sibling = None
+        self.dockerfile_content = None
         self.dockerfile_local_path = None
         self.dockerfile_repo_path = None
         self.repo_name = None
@@ -23,6 +24,7 @@ class treenode:
 class dependencies:
     def __init__(self, name):
         self.name = name
+        self.dependency_content = None
         self.deps_local_path = None
         self.deps_repo_path = None
 

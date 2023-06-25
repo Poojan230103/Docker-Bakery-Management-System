@@ -32,15 +32,8 @@
             </div>
          </div>
          <div class="form-container">
-{#            <div class="slide-controls">#}
-{#               <input type="radio" name="slide" id="new_comp" checked>#}
-{#               <input type="radio" name="slide" id="new_img">#}
-{#               <label for="new_comp" class="slide new_comp">Component</label>#}
-{#               <label for="new_img" class="slide new_img">Image</label>#}
-{#               <div class="slider-tab"></div>#}
-{#            </div>#}
             <div class="form-inner">
-               <form method="post" class="new_comp">
+               <form method="POST" class="new_comp">
                    {% csrf_token %}
 {#                   if user wants to add new component#}
                    <input type="hidden" name="source_type" value="component">

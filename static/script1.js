@@ -9,80 +9,6 @@ fetch('/static/data.json')
     //ul.classList.add('hide');
 });
 
-// function createNode(name, levelCode) {
-//     const treeview__level = document.createElement('div');
-//     treeview__level.classList.add('treeview__level');
-//     treeview__level.setAttribute('data-level', levelCode);
-//
-//     const level_title = document.createElement('span');
-//     level_title.classList.add('level-title');
-//     const text = document.createTextNode(name);
-//     level_title.appendChild(text);
-//
-//     const treeview__level_btns = document.createElement('div');
-//     treeview__level_btns.classList.add('treeview__level-btns');
-//
-//     const level_add = document.createElement('div');
-//     level_add.classList.add('btn', 'btn-default', 'btn-sm', 'level-add');
-//     const fa_plus = document.createElement('span');
-//     fa_plus.classList.add('fa', 'fa-plus');
-//     level_add.appendChild(fa_plus);
-//
-//     const level_remove = document.createElement('div');
-//     level_remove.classList.add('btn', 'btn-default', 'btn-sm', 'level-remove');
-//     const fa_trash = document.createElement('span');
-//     fa_trash.classList.add('fa', 'fa-trash', 'text-danger');
-//     level_remove.appendChild(fa_trash);
-//
-//     const level_same = document.createElement('div');
-//     level_same.classList.add('btn', 'btn-default', 'btn-sm', 'level-same');
-//     const same_level = document.createElement('span');
-//     same_level.appendChild(document.createTextNode('Add same level'));
-//     level_same.appendChild(same_level);
-//
-//     const level_sub = document.createElement('div');
-//     level_sub.classList.add('btn', 'btn-default', 'btn-sm', 'level-sub');
-//     const sub_level = document.createElement('span');
-//     sub_level.appendChild(document.createTextNode('Add sub level'));
-//     level_sub.appendChild(sub_level);
-//
-//     treeview__level_btns.appendChild(level_add);
-//     treeview__level_btns.appendChild(level_remove);
-//     treeview__level_btns.appendChild(level_same);
-//     treeview__level_btns.appendChild(level_sub);
-//
-//     treeview__level.appendChild(level_title);
-//     treeview__level.appendChild(treeview__level_btns);
-//
-//     return treeview__level;
-// }
-//
-// function parentFunction(json_data){
-//     const treeview = document.getElementsByClassName('treeview js-treeview')[0];
-//     const ul = treeview.firstElementChild;
-//     if(json_data.length > 1) {
-//         for(rootnode of json_data) {
-//             ul.appendChild(createGeneration(rootnode, '1'));
-//         }
-//     } else {
-//         ul.appendChild(createGeneration(json_data, '1'));
-//     }
-// }
-//
-// function createGeneration(json_data, level) {
-//     const name = json_data.img_name + ':' + json_data.tag + ' ' + `( ${json_data.sibling==null? '' : json_data.sibling})`;
-//     const node = createNode(name, level);
-//     const li = document.createElement('li');
-//     li.appendChild(node);
-//     const ul = document.createElement('ul');
-//     if(json_data.children.length != 0) {
-//         for(child of json_data.children) {
-//             ul.appendChild(createGeneration(child, `${+level + 1}`));
-//         }
-//     }
-//     li.appendChild(ul);
-//     return li;
-// }
 
 function createNode(name, levelCode, node_id) {
     const treeview__level = document.createElement('div');
@@ -111,29 +37,36 @@ function createNode(name, levelCode, node_id) {
     fa_trash.classList.add('fa', 'fa-trash', 'text-danger');
     level_remove.appendChild(fa_trash);
 
-    const level_same = document.createElement('div');
-    level_same.classList.add('btn', 'btn-default', 'btn-sm', 'level-same');
-    const same_level = document.createElement('span');
-    same_level.appendChild(document.createTextNode('Update Node'));
-    level_same.appendChild(same_level);
+    const update_node = document.createElement('div');
+    update_node.classList.add('btn', 'btn-default', 'btn-sm', 'update-node');
+    const update_span = document.createElement('span');
+    update_span.appendChild(document.createTextNode('Update Node'));
+    update_node.appendChild(update_span);
 
     const upgrade_node = document.createElement('div');
     upgrade_node.classList.add('btn', 'btn-default', 'btn-sm', 'upgrade-node');
-    const upgrade = document.createElement('span');
-    upgrade_node.appendChild(document.createTextNode('Upgrade Node'));
-    upgrade_node.appendChild(upgrade);
+    const upgrade_span = document.createElement('span');
+    upgrade_span.appendChild(document.createTextNode('Upgrade Node'));
+    upgrade_node.appendChild(upgrade_span);
 
-    const level_sub = document.createElement('div');
-    level_sub.classList.add('btn', 'btn-default', 'btn-sm', 'level-sub');
-    const sub_level = document.createElement('span');
-    sub_level.appendChild(document.createTextNode('Add Child'));
-    level_sub.appendChild(sub_level);
+    const add_child = document.createElement('div');
+    add_child.classList.add('btn', 'btn-default', 'btn-sm', 'add-child');
+    const child_span = document.createElement('span');
+    child_span.appendChild(document.createTextNode('Add Child'));
+    add_child.appendChild(child_span);
+
+    const edit_node = document.createElement('div');
+    edit_node.classList.add('btn', 'btn-default', 'btn-sm', 'edit-node');
+    const edit_span = document.createElement('span');
+    edit_span.appendChild(document.createTextNode('Edit Node'));
+    edit_node.appendChild(edit_span);
 
     treeview__level_btns.appendChild(level_add);
     treeview__level_btns.appendChild(level_remove);
-    treeview__level_btns.appendChild(level_same);
+    treeview__level_btns.appendChild(update_node);
     treeview__level_btns.appendChild(upgrade_node);
-    treeview__level_btns.appendChild(level_sub);
+    treeview__level_btns.appendChild(add_child);
+    treeview__level_btns.appendChild(edit_node);
 
     treeview__level.appendChild(level_title);
     treeview__level.appendChild(treeview__level_btns);
@@ -188,8 +121,8 @@ A node
     <div class="treeview__level-btns">
         <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus"></span></div>
         <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
-        <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
-        <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+        <div class="btn btn-default btn-sm update-node"><span>Add Same Level</span></div>
+        <div class="btn btn-default btn-sm add-child"><span>Add Sub Level</span></div>
     </div>
 </div>
 
@@ -203,8 +136,8 @@ Its child
             <div class="treeview__level-btns">
                 <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus"></span></div>
                 <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
-                <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
-                <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                <div class="btn btn-default btn-sm update-node"><span>Add Same Level</span></div>
+                <div class="btn btn-default btn-sm add-child"><span>Add Sub Level</span></div>
             </div>
         </div>
     </li>
@@ -216,8 +149,8 @@ Its child
             <div class="treeview__level-btns">
                 <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus"></span></div>
                 <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
-                <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
-                <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                <div class="btn btn-default btn-sm update-node"><span>Add Same Level</span></div>
+                <div class="btn btn-default btn-sm add-child"><span>Add Sub Level</span></div>
             </div>
         </div>
     </li>
