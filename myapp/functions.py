@@ -10,7 +10,7 @@ client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.m
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'
-my_git = Github("")
+my_git = Github("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")
 
 old_to_mirror = {}
 next_id = records.count_documents({}) + 1
@@ -224,13 +224,14 @@ def add_new_component(repo_name, components):
             new_node.component_name = comp
             file = my_repo.get_contents(new_node.dockerfile_repo_path)  # storing the contents of dockerfile
             response = requests.get(file.download_url)
-            contents = response.content
-            contents = str(contents, 'UTF-8')
-            new_node.dockerfile_content = contents
+            dockerfile_contents = response.content
+            dockerfile_contents = str(dockerfile_contents, 'UTF-8')
+            new_node.dockerfile_content = dockerfile_contents
             parent = None
             requirements_path = None
-            file = open(docker_path, 'r')  # reading the dockerfile
-            for lines in file:
+            dockerfile_contents = dockerfile_contents.splitlines()
+            # file = open(docker_path, 'r')  # reading the dockerfile
+            for lines in dockerfile_contents:
                 if lines.startswith('FROM'):
                     parent = lines.split()[1]
                     if parent.find(':') == -1:

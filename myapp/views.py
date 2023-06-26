@@ -15,7 +15,7 @@ client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.m
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'         # root path --> contains all the repos
-my_git = Github("")
+my_git = Github("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")
 
 
 def get_data():     # fetches the data from the database and converts it into hierarchical format to display it in UI
@@ -28,7 +28,7 @@ def get_data():     # fetches the data from the database and converts it into hi
         if img["sibling"]:
             node = records.find_one({"_id": img["sibling"]})
             img["sibling"] = str(node["img_name"] + ':' + str(node["tag"]))
-    hierarchy = create_hierarchy(data)
+    hierarchy = create_hierarchy(data)                          # convert the list of documents into hierarchical form
     json_data = json.dumps(hierarchy[0], indent=2)              # converting the hierarchical data into json
     f = open('./static/data.json', 'w')
     f.write(json_data)
@@ -155,10 +155,10 @@ def manual_sync(request):
             messages.error(request, "Cannot Sync Image without Repository")
             return redirect('/')
         repo_name = node["repo_name"]
-        if sync_type == 0:
-            p = Process(target=sync_new_node, args=(node,repo_name,))
-        else:
-            p = Process(target=sync_same_node, args=(node,repo_name,))
+        if sync_type == 0:                              # Upgrade Node
+            p = Process(target=sync_new_node, args=(node, repo_name,))
+        else:                                           # Update Node
+            p = Process(target=sync_same_node, args=(node, repo_name,))
         p.start()
         p.join()
         if p.exitcode == 0:
@@ -218,7 +218,6 @@ def edit_node(request):
         return redirect('/')
     else:
         node_id = int(request.GET.get('node_id'))
-        print("hello from edit_node", node_id, type(node_id))
         node = records.find_one({"_id": node_id})
         dockerfile_contents = node["dockerfile_content"]
         return render(request, 'edit_node.html', {"dockerfile_contents": dockerfile_contents, "node_id": node_id})
