@@ -10,7 +10,7 @@ client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.m
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'
-my_git = Github("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")
+my_git = Github("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")
 
 old_to_mirror = {}
 next_id = records.count_documents({}) + 1
@@ -30,10 +30,8 @@ def parse_script(shell_script):
     components = {}
     current_component = None
     shell_script = shell_script.splitlines()
-    # print(shell_script)
     for line in shell_script:
         line = line.strip()
-        # print(line)
         # Check for component name
         component_match = re.match(r'(\S+)\)\s*$', line)
         if component_match:
@@ -45,7 +43,6 @@ def parse_script(shell_script):
             dockerfile_path = dockerfile_match.group(1)
             components[current_component] = dockerfile_path
             current_component = None
-    # print(components)
     return components
 
 
@@ -87,6 +84,15 @@ def build_image(parameter):
         if response["status"] == "Success" or response["status"] == "Failed":
             return response["status"]
         time.sleep(5)
+
+
+def delete_image(parameter):
+    response = requests.post("http://127.0.0.1:9000/delete_node_api", data=parameter)
+    response = response.json()
+    if response["status"] == "Success":
+        return "Success"
+    else:
+        return "Failed"
 
 
 def sync_new_node(node, repo_name):
@@ -352,16 +358,6 @@ def dfs_same_node(node_id, update_time=True):             # recursively re-build
                 requirements = dep["dependency_content"]
         parameter = {"dockerfile": child_node["dockerfile_content"], "img_name": child_node["img_name"], "tag": child_node["tag"], "requirements": requirements}
         status = build_image(parameter)
-        # response = requests.post("http://127.0.0.1:9000/build_no_component", data=parameter)
-        # response = response.json()
-        # parameter = {"job_id": response["job_id"]}
-        # while True:  # polling every 10 seconds
-        #     response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
-        #     response = response.json()
-        #     if response["status"] == "Success" or response["status"] == "Failed":
-        #         print(response["status"])
-        #         break
-        #     time.sleep(5)
         for ids_child in child_node["children"]:
             dfs_same_node(ids_child)
     if update_time:
@@ -375,9 +371,25 @@ def autosync_same_node(repo_name):
     response = requests.get(file.download_url)
     shell_script = str(response.content, 'UTF-8')
     components = parse_script(shell_script)
+    print(components)
     add_new_component(repo_name, components)  # checking and building if new components are added
     for comp in components.keys():
         node = records.find_one({"repo_name": repo_name, "component_name": comp}, sort=[("tag", -1)], limit=1)      # finding the node with highest tag.
         sync_same_node(node, repo_name)
+
+
+delete_status = True
+
+
+def delete_subtree(node_id):
+    node = records.find_one({"_id": node_id})
+    for child_id in node["children"]:
+        delete_subtree(child_id)
+
+    parameters = {"img_name": node["img_name"], "tag": node["tag"]}
+    status = delete_image(parameters)
+    if status == "Success":
+        records.delete_one({"_id": node["_id"]})
+
 
 

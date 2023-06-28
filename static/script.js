@@ -52,15 +52,23 @@ $(function() {
     window.location.href = url
   });
 
-    // Add new Node
+    // Edit Node
   $(".js-treeview").on("click", ".edit-node", function() {
     target = $(this);
     let liElm = target.closest("li");
     let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
     let url = '/edit_node?node_id=' + node_id
-    // window.location.replace(url)
     window.location.href = url
   });
+
+  $(".js-treeview").on("click", ".delete-node", function() {
+    target = $(this);
+    let liElm = target.closest("li");
+    let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
+    let url = '/delete_node?node_id=' + node_id
+    window.location.href = url
+  });
+
 
     // Remove Level
   $(".js-treeview").on("click", ".level-remove", function() {

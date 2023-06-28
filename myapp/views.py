@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from datetime import datetime
 from github import Github
 from myapp.models import treenode, dependencies
-from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sync_new_node, build_image, sync_same_node,dfs_same_node,dfs_new_node
+from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sync_new_node, build_image, sync_same_node,dfs_same_node, dfs_new_node, delete_subtree
 from django.contrib import messages
 
 
@@ -15,7 +15,7 @@ client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.m
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'         # root path --> contains all the repos
-my_git = Github("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")
+my_git = Github("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")
 
 
 def get_data():     # fetches the data from the database and converts it into hierarchical format to display it in UI
@@ -120,6 +120,23 @@ def add_node(request):                  # addition of new node through UI
                 if float(tag) <= sibling["tag"]:        # throw an error that tag should be incremental
                     messages.error(request, "Tag should be incremental")
                     return redirect('/')
+            # checking whether the parent in the dockerfile matches the one in the form.
+            parent_name = None
+            dockerfile_contents = dockerfile.splitlines()
+            line_num = -1
+            cnt = 0
+            for line in dockerfile_contents:
+                if line.__contains__("FROM"):
+                    line_num = cnt
+                cnt += 1
+            if line_num != -1:
+                parent_name = dockerfile_contents[line_num].split()[1]
+            print(parent_name)
+            parent_node = records.find_one({"_id": parent})
+            parent_from_user = records.find_one({"img_name": parent_name.split(':')[0], "tag": float(parent_name.split(':')[1])})
+            if (parent_from_user == None) or (parent != parent_from_user["_id"]):
+                messages.error(request, "Parent Name did not Match.")
+                return redirect('/')
             new_node = treenode(img_name + ':' + tag)
             new_node.parent = int(parent)
             new_node.dockerfile_content = dockerfile
@@ -197,6 +214,22 @@ def edit_node(request):
         node_id = int(request.POST['node_id'])
         node = records.find_one({"_id": node_id})
         node["dockerfile_content"] = updated_dockerfile_contents
+        # checking whether the parent in the dockerfile matches the one in the form.
+        parent_name = None
+        updated_dockerfile_contents = updated_dockerfile_contents.splitlines()
+        line_num = -1
+        cnt = 0
+        for line in updated_dockerfile_contents:
+            if line.__contains__("FROM"):
+                line_num = cnt
+            cnt += 1
+        if line_num != -1:
+            parent_name = updated_dockerfile_contents[line_num].split()[1]
+        print(parent_name)
+        parent_from_user = records.find_one({"img_name": parent_name.split(':')[0], "tag": float(parent_name.split(':')[1])})
+        if (parent_from_user == None) or (node_id != parent_from_user["_id"]):
+            messages.error(request, "Parent Name did not Match.")
+            return redirect('/')
         # do not make this change in github repository.
         # re-build this image and recursively re-build children without changing the tag.
         if node["repo_name"]:
@@ -221,5 +254,12 @@ def edit_node(request):
         node = records.find_one({"_id": node_id})
         dockerfile_contents = node["dockerfile_content"]
         return render(request, 'edit_node.html', {"dockerfile_contents": dockerfile_contents, "node_id": node_id})
+
+
+def delete_node(request):
+    node_id = int(request.GET.get('node_id'))
+    delete_subtree(node_id)
+    messages.success(request, "Image Deleted Successfully")
+    return redirect('/')
 
 

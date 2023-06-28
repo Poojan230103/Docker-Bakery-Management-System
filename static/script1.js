@@ -37,29 +37,40 @@ function createNode(name, levelCode, node_id) {
     fa_trash.classList.add('fa', 'fa-trash', 'text-danger');
     level_remove.appendChild(fa_trash);
 
+    // update node
     const update_node = document.createElement('div');
     update_node.classList.add('btn', 'btn-default', 'btn-sm', 'update-node');
     const update_span = document.createElement('span');
     update_span.appendChild(document.createTextNode('Update Node'));
     update_node.appendChild(update_span);
 
+    // upgrade node
     const upgrade_node = document.createElement('div');
     upgrade_node.classList.add('btn', 'btn-default', 'btn-sm', 'upgrade-node');
     const upgrade_span = document.createElement('span');
     upgrade_span.appendChild(document.createTextNode('Upgrade Node'));
     upgrade_node.appendChild(upgrade_span);
 
+    // add child
     const add_child = document.createElement('div');
     add_child.classList.add('btn', 'btn-default', 'btn-sm', 'add-child');
     const child_span = document.createElement('span');
     child_span.appendChild(document.createTextNode('Add Child'));
     add_child.appendChild(child_span);
 
+    // edit node
     const edit_node = document.createElement('div');
     edit_node.classList.add('btn', 'btn-default', 'btn-sm', 'edit-node');
     const edit_span = document.createElement('span');
     edit_span.appendChild(document.createTextNode('Edit Node'));
     edit_node.appendChild(edit_span);
+
+    // delete node
+    const delete_node = document.createElement('div');
+    delete_node.classList.add('btn', 'btn-default', 'btn-sm', 'delete-node');
+    const delete_span = document.createElement('span');
+    delete_span.appendChild(document.createTextNode('Delete Node'));
+    delete_node.appendChild(delete_span);
 
     treeview__level_btns.appendChild(level_add);
     treeview__level_btns.appendChild(level_remove);
@@ -67,6 +78,7 @@ function createNode(name, levelCode, node_id) {
     treeview__level_btns.appendChild(upgrade_node);
     treeview__level_btns.appendChild(add_child);
     treeview__level_btns.appendChild(edit_node);
+    treeview__level_btns.appendChild(delete_node);
 
     treeview__level.appendChild(level_title);
     treeview__level.appendChild(treeview__level_btns);
@@ -110,6 +122,7 @@ function createGeneration(json_data, level) {
     li.appendChild(ul);
     return li;
 }
+
 
 
 
