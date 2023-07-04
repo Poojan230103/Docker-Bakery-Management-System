@@ -1,19 +1,19 @@
 import os, requests, time
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv
 from django.shortcuts import render, redirect
 import pymongo
 import json
 from multiprocessing import Process
 from django.http import HttpResponse
-from datetime import datetime
 from github import Github
 from myapp.models import treenode, dependencies
-from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sync_new_node, build_image, sync_same_node, dfs_same_node, dfs_new_node, delete_subtree, redeploy_components
+from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sync_new_node, build_image, sync_same_node, dfs_same_node, delete_subtree, redeploy_components
 from django.contrib import messages
 
 
 load_dotenv()
-client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.mongodb.net/?retryWrites=true&w=majority")
+# client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient(os.getenv("MONGODB_CONNECTION_STRING"))
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'         # root path --> contains all the repos

@@ -1,6 +1,6 @@
-import re,pytz,copy, json, time, os
+import re, pytz, copy, json, time, os
 from datetime import datetime
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv
 import pymongo
 from myapp.models import treenode, dependencies
 from github import Github
@@ -8,7 +8,8 @@ import requests
 
 
 load_dotenv()
-client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.mongodb.net/?retryWrites=true&w=majority")
+# client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient(os.getenv("MONGODB_CONNECTION_STRING"))
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'
