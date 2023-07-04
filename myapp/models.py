@@ -10,6 +10,7 @@ class treenode:
         self.children = []
         self.parent = None
         self.sibling = None
+        self.deployments = []
         self.dockerfile_content = None
         self.dockerfile_local_path = None
         self.dockerfile_repo_path = None

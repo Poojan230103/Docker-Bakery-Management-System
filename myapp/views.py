@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from datetime import datetime
 from github import Github
 from myapp.models import treenode, dependencies
-from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sync_new_node, build_image, sync_same_node,dfs_same_node, dfs_new_node, delete_subtree
+from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sync_new_node, build_image, sync_same_node, dfs_same_node, dfs_new_node, delete_subtree, redeploy_components
 from django.contrib import messages
 
 
@@ -15,7 +15,7 @@ client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.m
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'         # root path --> contains all the repos
-my_git = Github("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")
+my_git = Github("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")
 
 
 def get_data():     # fetches the data from the database and converts it into hierarchical format to display it in UI
@@ -49,7 +49,7 @@ def add_node(request):                  # addition of new node through UI
             repo = request.POST['repo_name']
             component_name = request.POST['comp_name']
             tag = request.POST['Tag']
-            img_name = 'docker-bakery-system/' + component_name
+            img_name = 'poojan23/docker-bakery-system_' + component_name
             if records.count_documents({"img_name": img_name, "tag": float(tag)}):      # check whether the img already exists
                 messages.error(request, "Image Already Exists")
                 return redirect('/')
@@ -71,8 +71,6 @@ def add_node(request):                  # addition of new node through UI
                 my_repo = my_git.get_repo(f'''Poojan230103/{repo}''')
                 commits = my_repo.get_commits(sha=my_repo.default_branch)[0]
                 new_node.commit_id = commits.sha                                     # storing the commit sha of the node.
-                dockerfile_path = root_path + '/' + repo + components[component_name][1:]
-                new_node.dockerfile_local_path = dockerfile_path
                 new_node.dockerfile_repo_path = components[component_name][1:]
                 file = my_repo.get_contents(new_node.dockerfile_repo_path)              # storing the contents of Dockerfile
                 response = requests.get(file.download_url)
@@ -96,7 +94,9 @@ def add_node(request):                  # addition of new node through UI
                         return redirect('/')
                     else:
                         new_node.sibling = sibling["_id"]
-                new_node._id = records.count_documents({}) + 1
+                # -----------------------------------------------------------------------------------------------
+                element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)        # finding the highest id
+                new_node._id = element_with_highest_id["_id"] + 1                                   # assigning id
                 json_data = json.dumps(new_node, default=lambda o: o.__dict__, indent=4)        # converting tree object to json
                 json_data = json.loads(json_data)                                               # converting json to python dictionary
                 records.insert_one(json_data)
@@ -134,7 +134,7 @@ def add_node(request):                  # addition of new node through UI
             print(parent_name)
             parent_node = records.find_one({"_id": parent})
             parent_from_user = records.find_one({"img_name": parent_name.split(':')[0], "tag": float(parent_name.split(':')[1])})
-            if (parent_from_user == None) or (parent != parent_from_user["_id"]):
+            if (parent_from_user is None) or (parent != parent_from_user["_id"]):
                 messages.error(request, "Parent Name did not Match.")
                 return redirect('/')
             new_node = treenode(img_name + ':' + tag)
@@ -148,11 +148,11 @@ def add_node(request):                  # addition of new node through UI
                 new_node.sibling = sibling["_id"]
             parameter = {"dockerfile": new_node.dockerfile_content, "img_name": new_node.img_name, "tag": new_node.tag, "requirements": requirements}
             build_image(parameter)
-            new_node._id = records.count_documents({}) + 1
+            element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)  # finding the highest id
+            new_node._id = element_with_highest_id["_id"] + 1
             json_data = json.dumps(new_node, default=lambda o: o.__dict__, indent=4)
             json_data = json.loads(json_data)
             records.insert_one(json_data)
-            parent_node = records.find_one({"_id": int(parent)})
             parent_node["children"].append(new_node._id)
             records.replace_one({"_id": int(parent)}, parent_node)
             messages.success(request, "Image Created Successfully.")
@@ -164,11 +164,11 @@ def manual_sync(request):
         img_name = request.POST['img_name']
         sync_type = int(request.POST['sync_type'])
         node = records.find_one({"img_name": img_name}, sort=[("tag", -1)], limit=1)
-        if node == None:
+        if node is None:
             messages.error(request, "Image Does Not Exist")
             return redirect('/')
-        if node["repo_name"] == None:
-            print("hello ")
+        if node["repo_name"] is None:
+            # print("hello ")
             messages.error(request, "Cannot Sync Image without Repository")
             return redirect('/')
         repo_name = node["repo_name"]
@@ -186,7 +186,7 @@ def manual_sync(request):
     else:                                           # Manual Sync by right-clicking on the Node
         node_id = int(request.GET.get('node_id'))
         selected_node = records.find_one({"_id": node_id})
-        if selected_node["repo_name"] == None:
+        if selected_node["repo_name"] is None:
             messages.error(request, "Cannot Sync Image without Repository")
             return redirect('/')
         max_tag_node = records.find_one({"img_name": selected_node["img_name"]}, sort=[("tag", -1)], limit=1)
@@ -225,12 +225,12 @@ def edit_node(request):
             cnt += 1
         if line_num != -1:
             parent_name = updated_dockerfile_contents[line_num].split()[1]
-        print(parent_name)
+        # print(parent_name)
         parent_from_user = records.find_one({"img_name": parent_name.split(':')[0], "tag": float(parent_name.split(':')[1])})
-        if (parent_from_user == None) or (node_id != parent_from_user["_id"]):
+        if (parent_from_user is None) or (node_id != parent_from_user["_id"]):
             messages.error(request, "Parent Name did not Match.")
             return redirect('/')
-        # do not make this change in github repository.
+        # do not make this change in GitHub repository.
         # re-build this image and recursively re-build children without changing the tag.
         if node["repo_name"]:
             parameter = {"repo_name": node["repo_name"], "component_name": node["component_name"],
@@ -241,6 +241,9 @@ def edit_node(request):
             parameter = {"dockerfile": node["dockerfile_content"], "img_name": node["img_name"],
                          "tag": node["tag"], "requirements": node}
             status = build_image(parameter)
+            # -------------------------------------- call redeploy_component function here --------------------------------- #
+            redeploy_components(node)
+            # --------------------------------------  --------------------------------- #
         for ids in node["children"]:
             dfs_same_node(ids, False)
         if status == "Success":
@@ -257,9 +260,25 @@ def edit_node(request):
 
 
 def delete_node(request):
+    delete_siblings = int(request.GET.get('delete_siblings'))
+    print(delete_siblings)
     node_id = int(request.GET.get('node_id'))
-    delete_subtree(node_id)
+    print(node_id)
+    node = records.find_one({"_id": node_id})
+    if delete_siblings:
+        list_of_nodes = list(records.find({"img_name": node["img_name"]}))
+        list_of_nodes = json.dumps(list_of_nodes, indent=4)      # converting cursor object returned by mongoDB to json format.
+        list_of_nodes = json.loads(list_of_nodes)               # converts json data to python object
+        for node in list_of_nodes:
+            delete_subtree(node["_id"])
+    else:
+        delete_subtree(node_id)
     messages.success(request, "Image Deleted Successfully")
     return redirect('/')
 
+
+def get_k8s_deployments(request):
+    parameters = {"env": "prod"}
+    response = requests.post("http://127.0.0.1:9000/get_deployments", data=parameters)
+    # print(response)
 

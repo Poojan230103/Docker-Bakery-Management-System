@@ -4,134 +4,96 @@
   "tag": 1.0,
   "children": [
     {
-      "_id": 45,
-      "img_name": "docker-bakery-system/test-component1_repo9",
-      "tag": 1.0,
-      "children": [],
-      "parent": 1,
-      "sibling": null,
-      "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo9/components_repo9/test-component1_repo9/Dockerfile",
-      "dockerfile_content": "# nginx_img:1.0\n\nFROM base_img:1.0\n \nRUN apt-get -y update \nRUN apt-get install \u2013y nginx \nCMD [\u201cecho\u201d,\u201dImage created\u201d] \n",
-      "dockerfile_repo_path": "/components_repo9/test-component1_repo9/Dockerfile",
-      "repo_name": "docker-bakery_repo9",
-      "created_time": "2023-06-27 13:39:57",
-      "last_updated_time": "2023-06-27 13:39:57",
-      "last_synced_time": "2023-06-27 13:39:57",
-      "component_name": "test-component1_repo9",
-      "architecture": "intel",
-      "files": [],
-      "commit_id": "bb02b49d0a2c559b6d0fb1eb4961e05b7d0b7179"
-    },
-    {
-      "_id": 46,
-      "img_name": "docker-bakery-system/test-component2_repo9",
-      "tag": 1.0,
-      "children": [],
-      "parent": 1,
-      "sibling": null,
-      "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo9/components_repo9/test-component2_repo9/Dockerfile",
-      "dockerfile_content": "# nginx_img:2.0\n\nFROM base_img:1.0\n \nRUN apt-get -y update \nRUN apt-get install \u2013y nginx \nCMD [\u201cecho\u201d,\u201dImage created\u201d] \n",
-      "dockerfile_repo_path": "/components_repo9/test-component2_repo9/Dockerfile",
-      "repo_name": "docker-bakery_repo9",
-      "created_time": "2023-06-27 13:39:57",
-      "last_updated_time": "2023-06-27 13:39:57",
-      "last_synced_time": "2023-06-27 13:39:57",
-      "component_name": "test-component2_repo9",
-      "architecture": "intel",
-      "files": [],
-      "commit_id": "bb02b49d0a2c559b6d0fb1eb4961e05b7d0b7179"
-    },
-    {
-      "_id": 47,
-      "img_name": "docker-bakery-system/test-component3_repo9",
-      "tag": 1.0,
-      "children": [],
-      "parent": 1,
-      "sibling": null,
-      "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo9/components_repo9/test-component3_repo9/Dockerfile",
-      "dockerfile_content": "# nginx_img:3.0\n\nFROM base_img:1.0\n \nRUN apt-get -y update \nRUN apt-get install \u2013y nginx \nCMD [\u201cecho\u201d,\u201dImage created\u201d] \n",
-      "dockerfile_repo_path": "/components_repo9/test-component3_repo9/Dockerfile",
-      "repo_name": "docker-bakery_repo9",
-      "created_time": "2023-06-27 13:39:58",
-      "last_updated_time": "2023-06-27 13:39:58",
-      "last_synced_time": "2023-06-27 13:39:58",
-      "component_name": "test-component3_repo9",
-      "architecture": "intel",
-      "files": [],
-      "commit_id": "bb02b49d0a2c559b6d0fb1eb4961e05b7d0b7179"
-    },
-    {
       "_id": 9,
       "img_name": "gcc_img",
       "tag": 1.0,
       "children": [
         {
           "_id": 36,
-          "img_name": "docker-bakery-system/test-component1_repo6",
+          "img_name": "poojan23/docker-bakery-system_repo6-component1",
           "tag": 1.0,
           "children": [],
+          "deployments": [
+            {
+              "deployment_name": "repo6-component1-deployment-1",
+              "env": "prod"
+            }
+          ],
           "parent": 9,
           "sibling": null,
           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo6/components_repo6/test-component1_repo6/Dockerfile",
-          "dockerfile_content": "# java_img:1.0\n\nFROM gcc_img\n\nRUN apt-get -y update\nRUN apt-get -y install default-jre",
+          "dockerfile_content": "# java_img:1.0\n\nFROM gcc_img:1.0\n\nRUN apt-get -y update\nRUN apt-get -y install default-jre",
           "dockerfile_repo_path": "/components_repo6/test-component1_repo6/Dockerfile",
           "repo_name": "docker-bakery_repo6",
-          "created_time": "2023-06-27 13:39:49",
-          "last_updated_time": "2023-06-27 13:39:49",
-          "last_synced_time": "2023-06-27 13:39:49",
-          "component_name": "test-component1_repo6",
+          "created_time": "2023-07-02 22:57:26",
+          "last_updated_time": "2023-07-02 22:57:26",
+          "last_synced_time": "2023-07-02 22:57:26",
+          "component_name": "repo6-component1",
           "architecture": "intel",
           "files": [],
-          "commit_id": "0692d8c6bb3585fe1a293020b6ce64750e4974f4"
+          "commit_id": "f439a2046963c132ad722e39276a6014f790ba3f"
         },
         {
           "_id": 37,
-          "img_name": "docker-bakery-system/test-component2_repo6",
+          "img_name": "poojan23/docker-bakery-system_repo6-component2",
           "tag": 1.0,
           "children": [],
+          "deployments": [
+            {
+              "deployment_name": "repo6-component2-deployment-1",
+              "env": "prod"
+            }
+          ],
           "parent": 9,
           "sibling": null,
           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo6/components_repo6/test-component2_repo6/Dockerfile",
-          "dockerfile_content": "# java_img:2.0\n\nFROM gcc_img\n\nRUN apt-get -y update\nRUN apt-get -y install default-jre",
+          "dockerfile_content": "# java_img:2.0\n\nFROM gcc_img:1.0\n\nRUN apt-get -y update\nRUN apt-get -y install default-jre",
           "dockerfile_repo_path": "/components_repo6/test-component2_repo6/Dockerfile",
           "repo_name": "docker-bakery_repo6",
-          "created_time": "2023-06-27 13:39:50",
-          "last_updated_time": "2023-06-27 13:39:50",
-          "last_synced_time": "2023-06-27 13:39:50",
-          "component_name": "test-component2_repo6",
+          "created_time": "2023-07-02 22:57:27",
+          "last_updated_time": "2023-07-02 22:57:27",
+          "last_synced_time": "2023-07-02 22:57:27",
+          "component_name": "repo6-component2",
           "architecture": "intel",
           "files": [],
-          "commit_id": "0692d8c6bb3585fe1a293020b6ce64750e4974f4"
+          "commit_id": "f439a2046963c132ad722e39276a6014f790ba3f"
         },
         {
           "_id": 38,
-          "img_name": "docker-bakery-system/test-component3_repo6",
+          "img_name": "poojan23/docker-bakery-system_repo6-component3",
           "tag": 1.0,
           "children": [],
+          "deployments": [
+            {
+              "deployment_name": "repo6-component3-deployment-1",
+              "env": "prod"
+            }
+          ],
           "parent": 9,
           "sibling": null,
           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo6/components_repo6/test-component3_repo6/Dockerfile",
-          "dockerfile_content": "# java_img:3.0\n\nFROM gcc_img\n\n\nRUN apt-get -y update\nRUN apt-get -y install default-jre",
+          "dockerfile_content": "# java_img:3.0\n\nFROM gcc_img:1.0\n\n\nRUN apt-get -y update\nRUN apt-get -y install default-jre",
           "dockerfile_repo_path": "/components_repo6/test-component3_repo6/Dockerfile",
           "repo_name": "docker-bakery_repo6",
-          "created_time": "2023-06-27 13:39:51",
-          "last_updated_time": "2023-06-27 13:39:51",
-          "last_synced_time": "2023-06-27 13:39:51",
-          "component_name": "test-component3_repo6",
+          "created_time": "2023-07-02 22:57:27",
+          "last_updated_time": "2023-07-02 22:57:27",
+          "last_synced_time": "2023-07-02 22:57:27",
+          "component_name": "repo6-component3",
           "architecture": "intel",
           "files": [],
-          "commit_id": "0692d8c6bb3585fe1a293020b6ce64750e4974f4"
+          "commit_id": "f439a2046963c132ad722e39276a6014f790ba3f"
         }
       ],
+      "deployments": [],
       "parent": 1,
       "sibling": null,
       "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img2/Dockerfile",
       "dockerfile_content": "\nFROM base_img:1.0\n\nRUN apt-get -y update\nRUN apt-get -y install build-essential",
       "dockerfile_repo_path": null,
       "repo_name": null,
-      "created_time": "2023-06-27 13:39:32",
-      "last_updated_time": "2023-06-27 13:39:32",
-      "last_synced_time": "2023-06-27 13:39:32",
+      "created_time": "2023-07-02 22:57:09",
+      "last_updated_time": "2023-07-02 22:57:09",
+      "last_synced_time": "2023-07-02 22:57:09",
       "component_name": null,
       "architecture": "intel",
       "files": [],
@@ -149,276 +111,426 @@
           "children": [
             {
               "_id": 24,
-              "img_name": "docker-bakery-system/test-component1_repo3",
+              "img_name": "poojan23/docker-bakery-system_repo3-component1",
               "tag": 1.0,
               "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo3-component1-deployment-1",
+                  "env": "prod"
+                }
+              ],
               "parent": 2,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo3/components_repo3/test-component1_repo3/Dockerfile",
-              "dockerfile_content": "# materialui_img:1.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install @material-ui/core\n",
+              "dockerfile_content": "# materialui_img:1.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install @material-ui/core\n\nENTRYPOINT [\"/bin/sh\", \"-c\", \"while true; do sleep 5; done\"]\n",
               "dockerfile_repo_path": "/components_repo3/test-component1_repo3/Dockerfile",
               "repo_name": "docker-bakery_repo3",
-              "created_time": "2023-06-27 13:39:40",
-              "last_updated_time": "2023-06-27 13:39:40",
-              "last_synced_time": "2023-06-27 13:39:40",
-              "component_name": "test-component1_repo3",
+              "created_time": "2023-07-02 22:57:17",
+              "last_updated_time": "2023-07-02 22:57:17",
+              "last_synced_time": "2023-07-02 22:57:17",
+              "component_name": "repo3-component1",
               "architecture": "intel",
               "files": [],
-              "commit_id": "a95b30982154406c50ed460c821e45fea5c028a4"
+              "commit_id": "f6dbc2b48551b75274cecb7340f86fa325d646b7"
+            },
+            {
+              "_id": 25,
+              "img_name": "poojan23/docker-bakery-system_repo3-component2",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo3-component2-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 2,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo3/components_repo3/test-component2_repo3/Dockerfile",
+              "dockerfile_content": "# materialui_img:2.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install @material-ui/core\n\nENTRYPOINT [\"/bin/sh\", \"-c\", \"while true; do sleep 5; done\"]\n",
+              "dockerfile_repo_path": "/components_repo3/test-component2_repo3/Dockerfile",
+              "repo_name": "docker-bakery_repo3",
+              "created_time": "2023-07-02 22:57:18",
+              "last_updated_time": "2023-07-02 22:57:18",
+              "last_synced_time": "2023-07-02 22:57:18",
+              "component_name": "repo3-component2",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "f6dbc2b48551b75274cecb7340f86fa325d646b7"
+            },
+            {
+              "_id": 26,
+              "img_name": "poojan23/docker-bakery-system_repo3-component3",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo3-component3-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 2,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo3/components_repo3/test-component3_repo3/Dockerfile",
+              "dockerfile_content": "# materialui_img:3.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install @material-ui/core\n\nENTRYPOINT [\"/bin/sh\", \"-c\", \"while true; do sleep 5; done\"]\n",
+              "dockerfile_repo_path": "/components_repo3/test-component3_repo3/Dockerfile",
+              "repo_name": "docker-bakery_repo3",
+              "created_time": "2023-07-02 22:57:19",
+              "last_updated_time": "2023-07-02 22:57:19",
+              "last_synced_time": "2023-07-02 22:57:19",
+              "component_name": "repo3-component3",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "f6dbc2b48551b75274cecb7340f86fa325d646b7"
             },
             {
               "_id": 21,
-              "img_name": "docker-bakery-system/test-component1_repo4",
+              "img_name": "poojan23/docker-bakery-system_repo4-component1",
               "tag": 1.0,
               "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo4-component1-deployment-1",
+                  "env": "prod"
+                }
+              ],
               "parent": 2,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo4/components_repo4/test-component1_repo4/Dockerfile",
               "dockerfile_content": "# express_img:1.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm -y install express\n",
               "dockerfile_repo_path": "/components_repo4/test-component1_repo4/Dockerfile",
               "repo_name": "docker-bakery_repo4",
-              "created_time": "2023-06-27 13:39:38",
-              "last_updated_time": "2023-06-27 13:39:38",
-              "last_synced_time": "2023-06-27 13:39:38",
-              "component_name": "test-component1_repo4",
+              "created_time": "2023-07-02 22:57:16",
+              "last_updated_time": "2023-07-02 22:57:16",
+              "last_synced_time": "2023-07-02 22:57:16",
+              "component_name": "repo4-component1",
               "architecture": "intel",
               "files": [],
-              "commit_id": "6e9e6f96201a1bc31bc7784353c4f9b061ce2fe3"
-            },
-            {
-              "_id": 42,
-              "img_name": "docker-bakery-system/test-component1_repo7",
-              "tag": 1.0,
-              "children": [],
-              "parent": 2,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo7/components_repo7/test-component1_repo7/Dockerfile",
-              "dockerfile_content": "# parse_img:1.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install parse",
-              "dockerfile_repo_path": "/components_repo7/test-component1_repo7/Dockerfile",
-              "repo_name": "docker-bakery_repo7",
-              "created_time": "2023-06-27 13:39:54",
-              "last_updated_time": "2023-06-27 13:39:54",
-              "last_synced_time": "2023-06-27 13:39:54",
-              "component_name": "test-component1_repo7",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "ceee03e1bd12674acfe9a9cb84cb34e3f9981fca"
-            },
-            {
-              "_id": 33,
-              "img_name": "docker-bakery-system/test-component1_repo8",
-              "tag": 1.0,
-              "children": [],
-              "parent": 2,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo8/components_repo8/test-component1_repo8/Dockerfile",
-              "dockerfile_content": "# mongoose_img:1.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install mongoose",
-              "dockerfile_repo_path": "/components_repo8/test-component1_repo8/Dockerfile",
-              "repo_name": "docker-bakery_repo8",
-              "created_time": "2023-06-27 13:39:47",
-              "last_updated_time": "2023-06-27 13:39:47",
-              "last_synced_time": "2023-06-27 13:39:47",
-              "component_name": "test-component1_repo8",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "e0b7bc7688cd5451c01ea27812f399c1a8189bef"
-            },
-            {
-              "_id": 25,
-              "img_name": "docker-bakery-system/test-component2_repo3",
-              "tag": 1.0,
-              "children": [],
-              "parent": 2,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo3/components_repo3/test-component2_repo3/Dockerfile",
-              "dockerfile_content": "# materialui_img:2.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install @material-ui/core\n",
-              "dockerfile_repo_path": "/components_repo3/test-component2_repo3/Dockerfile",
-              "repo_name": "docker-bakery_repo3",
-              "created_time": "2023-06-27 13:39:41",
-              "last_updated_time": "2023-06-27 13:39:41",
-              "last_synced_time": "2023-06-27 13:39:41",
-              "component_name": "test-component2_repo3",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "a95b30982154406c50ed460c821e45fea5c028a4"
+              "commit_id": "70ce1ff0df9277c670ecfab6ad5c98098bb7ea9a"
             },
             {
               "_id": 22,
-              "img_name": "docker-bakery-system/test-component2_repo4",
+              "img_name": "poojan23/docker-bakery-system_repo4-component2",
               "tag": 1.0,
               "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo4-component2-deployment-1",
+                  "env": "prod"
+                }
+              ],
               "parent": 2,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo4/components_repo4/test-component2_repo4/Dockerfile",
               "dockerfile_content": "# express_img:2.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm -y install express\n",
               "dockerfile_repo_path": "/components_repo4/test-component2_repo4/Dockerfile",
               "repo_name": "docker-bakery_repo4",
-              "created_time": "2023-06-27 13:39:39",
-              "last_updated_time": "2023-06-27 13:39:39",
-              "last_synced_time": "2023-06-27 13:39:39",
-              "component_name": "test-component2_repo4",
+              "created_time": "2023-07-02 22:57:16",
+              "last_updated_time": "2023-07-02 22:57:16",
+              "last_synced_time": "2023-07-02 22:57:16",
+              "component_name": "repo4-component2",
               "architecture": "intel",
               "files": [],
-              "commit_id": "6e9e6f96201a1bc31bc7784353c4f9b061ce2fe3"
-            },
-            {
-              "_id": 43,
-              "img_name": "docker-bakery-system/test-component2_repo7",
-              "tag": 1.0,
-              "children": [],
-              "parent": 2,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo7/components_repo7/test-component2_repo7/Dockerfile",
-              "dockerfile_content": "# parse_img:2.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install parse",
-              "dockerfile_repo_path": "/components_repo7/test-component2_repo7/Dockerfile",
-              "repo_name": "docker-bakery_repo7",
-              "created_time": "2023-06-27 13:39:55",
-              "last_updated_time": "2023-06-27 13:39:55",
-              "last_synced_time": "2023-06-27 13:39:55",
-              "component_name": "test-component2_repo7",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "ceee03e1bd12674acfe9a9cb84cb34e3f9981fca"
-            },
-            {
-              "_id": 34,
-              "img_name": "docker-bakery-system/test-component2_repo8",
-              "tag": 1.0,
-              "children": [],
-              "parent": 2,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo8/components_repo8/test-component2_repo8/Dockerfile",
-              "dockerfile_content": "# mongoose_img:2.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install mongoose",
-              "dockerfile_repo_path": "/components_repo8/test-component2_repo8/Dockerfile",
-              "repo_name": "docker-bakery_repo8",
-              "created_time": "2023-06-27 13:39:48",
-              "last_updated_time": "2023-06-27 13:39:48",
-              "last_synced_time": "2023-06-27 13:39:48",
-              "component_name": "test-component2_repo8",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "e0b7bc7688cd5451c01ea27812f399c1a8189bef"
-            },
-            {
-              "_id": 26,
-              "img_name": "docker-bakery-system/test-component3_repo3",
-              "tag": 1.0,
-              "children": [],
-              "parent": 2,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo3/components_repo3/test-component3_repo3/Dockerfile",
-              "dockerfile_content": "# materialui_img:3.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install @material-ui/core\n",
-              "dockerfile_repo_path": "/components_repo3/test-component3_repo3/Dockerfile",
-              "repo_name": "docker-bakery_repo3",
-              "created_time": "2023-06-27 13:39:41",
-              "last_updated_time": "2023-06-27 13:39:41",
-              "last_synced_time": "2023-06-27 13:39:41",
-              "component_name": "test-component3_repo3",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "a95b30982154406c50ed460c821e45fea5c028a4"
+              "commit_id": "70ce1ff0df9277c670ecfab6ad5c98098bb7ea9a"
             },
             {
               "_id": 23,
-              "img_name": "docker-bakery-system/test-component3_repo4",
+              "img_name": "poojan23/docker-bakery-system_repo4-component3",
               "tag": 1.0,
               "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo4-component3-deployment-1",
+                  "env": "prod"
+                }
+              ],
               "parent": 2,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo4/components_repo4/test-component3_repo4/Dockerfile",
               "dockerfile_content": "# express_img:3.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm -y install express\n",
               "dockerfile_repo_path": "/components_repo4/test-component3_repo4/Dockerfile",
               "repo_name": "docker-bakery_repo4",
-              "created_time": "2023-06-27 13:39:39",
-              "last_updated_time": "2023-06-27 13:39:39",
-              "last_synced_time": "2023-06-27 13:39:39",
-              "component_name": "test-component3_repo4",
+              "created_time": "2023-07-02 22:57:17",
+              "last_updated_time": "2023-07-02 22:57:17",
+              "last_synced_time": "2023-07-02 22:57:17",
+              "component_name": "repo4-component3",
               "architecture": "intel",
               "files": [],
-              "commit_id": "6e9e6f96201a1bc31bc7784353c4f9b061ce2fe3"
+              "commit_id": "70ce1ff0df9277c670ecfab6ad5c98098bb7ea9a"
+            },
+            {
+              "_id": 42,
+              "img_name": "poojan23/docker-bakery-system_repo7-component1",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo7-component1-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 2,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo7/components_repo7/test-component1_repo7/Dockerfile",
+              "dockerfile_content": "# parse_img:1.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install parse",
+              "dockerfile_repo_path": "/components_repo7/test-component1_repo7/Dockerfile",
+              "repo_name": "docker-bakery_repo7",
+              "created_time": "2023-07-02 22:57:30",
+              "last_updated_time": "2023-07-02 22:57:30",
+              "last_synced_time": "2023-07-02 22:57:30",
+              "component_name": "repo7-component1",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "7b440fa4e54746c12ee4448bd40706cca227f7f4"
+            },
+            {
+              "_id": 43,
+              "img_name": "poojan23/docker-bakery-system_repo7-component2",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo7-component2-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 2,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo7/components_repo7/test-component2_repo7/Dockerfile",
+              "dockerfile_content": "# parse_img:2.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install parse",
+              "dockerfile_repo_path": "/components_repo7/test-component2_repo7/Dockerfile",
+              "repo_name": "docker-bakery_repo7",
+              "created_time": "2023-07-02 22:57:31",
+              "last_updated_time": "2023-07-02 22:57:31",
+              "last_synced_time": "2023-07-02 22:57:31",
+              "component_name": "repo7-component2",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "7b440fa4e54746c12ee4448bd40706cca227f7f4"
             },
             {
               "_id": 44,
-              "img_name": "docker-bakery-system/test-component3_repo7",
+              "img_name": "poojan23/docker-bakery-system_repo7-component3",
               "tag": 1.0,
               "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo7-component3-deployment-1",
+                  "env": "prod"
+                }
+              ],
               "parent": 2,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo7/components_repo7/test-component3_repo7/Dockerfile",
               "dockerfile_content": "# parse_img:3.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install parse",
               "dockerfile_repo_path": "/components_repo7/test-component3_repo7/Dockerfile",
               "repo_name": "docker-bakery_repo7",
-              "created_time": "2023-06-27 13:39:56",
-              "last_updated_time": "2023-06-27 13:39:56",
-              "last_synced_time": "2023-06-27 13:39:56",
-              "component_name": "test-component3_repo7",
+              "created_time": "2023-07-02 22:57:31",
+              "last_updated_time": "2023-07-02 22:57:31",
+              "last_synced_time": "2023-07-02 22:57:31",
+              "component_name": "repo7-component3",
               "architecture": "intel",
               "files": [],
-              "commit_id": "ceee03e1bd12674acfe9a9cb84cb34e3f9981fca"
+              "commit_id": "7b440fa4e54746c12ee4448bd40706cca227f7f4"
+            },
+            {
+              "_id": 33,
+              "img_name": "poojan23/docker-bakery-system_repo8-component1",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo8-component1-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 2,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo8/components_repo8/test-component1_repo8/Dockerfile",
+              "dockerfile_content": "# mongoose_img:1.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install mongoose",
+              "dockerfile_repo_path": "/components_repo8/test-component1_repo8/Dockerfile",
+              "repo_name": "docker-bakery_repo8",
+              "created_time": "2023-07-02 22:57:24",
+              "last_updated_time": "2023-07-02 22:57:24",
+              "last_synced_time": "2023-07-02 22:57:24",
+              "component_name": "repo8-component1",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "3a887cc251679bd55017d7f0b58f41beebe7699b"
+            },
+            {
+              "_id": 34,
+              "img_name": "poojan23/docker-bakery-system_repo8-component2",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo8-component2-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 2,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo8/components_repo8/test-component2_repo8/Dockerfile",
+              "dockerfile_content": "# mongoose_img:2.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install mongoose",
+              "dockerfile_repo_path": "/components_repo8/test-component2_repo8/Dockerfile",
+              "repo_name": "docker-bakery_repo8",
+              "created_time": "2023-07-02 22:57:25",
+              "last_updated_time": "2023-07-02 22:57:25",
+              "last_synced_time": "2023-07-02 22:57:25",
+              "component_name": "repo8-component2",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "3a887cc251679bd55017d7f0b58f41beebe7699b"
             },
             {
               "_id": 35,
-              "img_name": "docker-bakery-system/test-component3_repo8",
+              "img_name": "poojan23/docker-bakery-system_repo8-component3",
               "tag": 1.0,
               "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo8-component3-deployment-1",
+                  "env": "prod"
+                }
+              ],
               "parent": 2,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo8/components_repo8/test-component3_repo8/Dockerfile",
               "dockerfile_content": "# mongoose_img:3.0\n\nFROM npm_img:1.0\n\nWORKDIR /usr/app\nCOPY ./ /usr/app\nRUN npm install mongoose",
               "dockerfile_repo_path": "/components_repo8/test-component3_repo8/Dockerfile",
               "repo_name": "docker-bakery_repo8",
-              "created_time": "2023-06-27 13:39:49",
-              "last_updated_time": "2023-06-27 13:39:49",
-              "last_synced_time": "2023-06-27 13:39:49",
-              "component_name": "test-component3_repo8",
+              "created_time": "2023-07-02 22:57:25",
+              "last_updated_time": "2023-07-02 22:57:25",
+              "last_synced_time": "2023-07-02 22:57:25",
+              "component_name": "repo8-component3",
               "architecture": "intel",
               "files": [],
-              "commit_id": "e0b7bc7688cd5451c01ea27812f399c1a8189bef"
+              "commit_id": "3a887cc251679bd55017d7f0b58f41beebe7699b"
             }
           ],
+          "deployments": [],
           "parent": 3,
           "sibling": null,
           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img9/Dockerfile",
           "dockerfile_content": "\nFROM nodejs_img:1.0 \n\nRUN apt-get -y update\nRUN apt-get -y install npm",
           "dockerfile_repo_path": null,
           "repo_name": null,
-          "created_time": "2023-06-27 13:39:32",
-          "last_updated_time": "2023-06-27 13:39:32",
-          "last_synced_time": "2023-06-27 13:39:32",
+          "created_time": "2023-07-02 22:57:09",
+          "last_updated_time": "2023-07-02 22:57:09",
+          "last_synced_time": "2023-07-02 22:57:09",
           "component_name": null,
           "architecture": "intel",
           "files": [],
           "commit_id": null
         }
       ],
+      "deployments": [],
       "parent": 1,
       "sibling": null,
       "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img8/Dockerfile",
       "dockerfile_content": "\nFROM base_img:1.0\n\nRUN apt -y update\nRUN apt-get -y install nodejs",
       "dockerfile_repo_path": null,
       "repo_name": null,
-      "created_time": "2023-06-27 13:39:32",
-      "last_updated_time": "2023-06-27 13:39:32",
-      "last_synced_time": "2023-06-27 13:39:32",
+      "created_time": "2023-07-02 22:57:09",
+      "last_updated_time": "2023-07-02 22:57:09",
+      "last_synced_time": "2023-07-02 22:57:09",
       "component_name": null,
       "architecture": "intel",
       "files": [],
       "commit_id": null
     },
     {
+      "_id": 45,
+      "img_name": "poojan23/docker-bakery-system_repo9-component1",
+      "tag": 1.0,
+      "children": [],
+      "deployments": [
+        {
+          "deployment_name": "repo9-component1-deployment-1",
+          "env": "prod"
+        }
+      ],
+      "parent": 1,
+      "sibling": null,
+      "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo9/components_repo9/test-component1_repo9/Dockerfile",
+      "dockerfile_content": "# nginx_img:1.0\n\nFROM base_img:1.0\n \nRUN apt-get -y update\nRUN apt-get -y install nginx\nCMD [\u201cecho\u201d,\u201dImage created\u201d] \n\n",
+      "dockerfile_repo_path": "/components_repo9/test-component1_repo9/Dockerfile",
+      "repo_name": "docker-bakery_repo9",
+      "created_time": "2023-07-02 22:57:32",
+      "last_updated_time": "2023-07-02 22:57:32",
+      "last_synced_time": "2023-07-02 22:57:32",
+      "component_name": "repo9-component1",
+      "architecture": "intel",
+      "files": [],
+      "commit_id": "bfb8dd5f07b9ee43b959ca889d0161200274f99f"
+    },
+    {
+      "_id": 46,
+      "img_name": "poojan23/docker-bakery-system_repo9-component2",
+      "tag": 1.0,
+      "children": [],
+      "deployments": [
+        {
+          "deployment_name": "repo9-component2-deployment-1",
+          "env": "prod"
+        }
+      ],
+      "parent": 1,
+      "sibling": null,
+      "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo9/components_repo9/test-component2_repo9/Dockerfile",
+      "dockerfile_content": "# nginx_img:2.0\n\nFROM base_img:1.0\n \nRUN apt-get -y update\nRUN apt-get -y install nginx\nCMD [\u201cecho\u201d,\u201dImage created\u201d] \n\n",
+      "dockerfile_repo_path": "/components_repo9/test-component2_repo9/Dockerfile",
+      "repo_name": "docker-bakery_repo9",
+      "created_time": "2023-07-02 22:57:33",
+      "last_updated_time": "2023-07-02 22:57:33",
+      "last_synced_time": "2023-07-02 22:57:33",
+      "component_name": "repo9-component2",
+      "architecture": "intel",
+      "files": [],
+      "commit_id": "bfb8dd5f07b9ee43b959ca889d0161200274f99f"
+    },
+    {
+      "_id": 47,
+      "img_name": "poojan23/docker-bakery-system_repo9-component3",
+      "tag": 1.0,
+      "children": [],
+      "deployments": [
+        {
+          "deployment_name": "repo9-component3-deployment-1",
+          "env": "prod"
+        }
+      ],
+      "parent": 1,
+      "sibling": null,
+      "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo9/components_repo9/test-component3_repo9/Dockerfile",
+      "dockerfile_content": "# nginx_img:3.0\n\nFROM base_img:1.0\n \nRUN apt-get -y update\nRUN apt-get -y install nginx\nCMD [\u201cecho\u201d,\u201dImage created\u201d] \n\n",
+      "dockerfile_repo_path": "/components_repo9/test-component3_repo9/Dockerfile",
+      "repo_name": "docker-bakery_repo9",
+      "created_time": "2023-07-02 22:57:33",
+      "last_updated_time": "2023-07-02 22:57:33",
+      "last_synced_time": "2023-07-02 22:57:33",
+      "component_name": "repo9-component3",
+      "architecture": "intel",
+      "files": [],
+      "commit_id": "bfb8dd5f07b9ee43b959ca889d0161200274f99f"
+    },
+    {
       "_id": 0,
       "img_name": "python_img",
       "tag": 1.1,
       "children": [],
+      "deployments": [],
       "parent": 1,
       "sibling": "python_img:1.0",
       "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img7/Dockerfile",
       "dockerfile_content": "\nFROM base_img:1.0\n\nRUN apt-get -y update\nRUN apt-get -y install python3.11",
       "dockerfile_repo_path": null,
       "repo_name": null,
-      "created_time": "2023-06-27 13:39:32",
-      "last_updated_time": "2023-06-27 13:39:32",
-      "last_synced_time": "2023-06-27 13:39:32",
+      "created_time": "2023-07-02 22:57:09",
+      "last_updated_time": "2023-07-02 22:57:09",
+      "last_synced_time": "2023-07-02 22:57:09",
       "component_name": null,
       "architecture": "intel",
       "files": [],
@@ -435,232 +547,20 @@
           "tag": 1.0,
           "children": [
             {
-              "_id": 39,
-              "img_name": "docker-bakery-system/test-component1_repo1",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component1_repo1/Dockerfile",
-              "dockerfile_content": "# tensorflow_img:1.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo1/test-component1_repo1/requirements.txt .\n\nRUN pip install -r requirements.txt\n\n# hello world\n",
-              "dockerfile_repo_path": "/components_repo1/test-component1_repo1/Dockerfile",
-              "repo_name": "docker-bakery_repo1",
-              "created_time": "2023-06-27 13:39:51",
-              "last_updated_time": "2023-06-27 13:39:51",
-              "last_synced_time": "2023-06-27 13:39:51",
-              "component_name": "test-component1_repo1",
-              "architecture": "intel",
-              "files": [
-                {
-                  "name": "requirements.txt",
-                  "dependency_content": "tensorflow==2.12.0",
-                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component1_repo1/requirements.txt",
-                  "deps_repo_path": "/components_repo1/test-component1_repo1/requirements.txt"
-                }
-              ],
-              "commit_id": "7ae202c89ff02429181b44e32d1bb668818deb89"
-            },
-            {
-              "_id": 15,
-              "img_name": "docker-bakery-system/test-component1_repo2",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component1_repo2/Dockerfile",
-              "dockerfile_content": "# pandas_img:1.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo2/test-component1_repo2/requirements.txt .\n\nRUN pip install -r requirements.txt\n",
-              "dockerfile_repo_path": "/components_repo2/test-component1_repo2/Dockerfile",
-              "repo_name": "docker-bakery_repo2",
-              "created_time": "2023-06-27 13:39:34",
-              "last_updated_time": "2023-06-27 13:39:34",
-              "last_synced_time": "2023-06-27 13:39:34",
-              "component_name": "test-component1_repo2",
-              "architecture": "intel",
-              "files": [
-                {
-                  "name": "requirements.txt",
-                  "dependency_content": "pandas==2.0.2\n\n",
-                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component1_repo2/requirements.txt",
-                  "deps_repo_path": "/components_repo2/test-component1_repo2/requirements.txt"
-                }
-              ],
-              "commit_id": "b2a38a0a740e57751cb00083f70f692ff955efe0"
-            },
-            {
-              "_id": 18,
-              "img_name": "docker-bakery-system/test-component1_repo5",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo5/components_repo5/test-component1_repo5/Dockerfile",
-              "dockerfile_content": "# scipy_img:1.0\n\nFROM pip_img\n\nRUN pip -y install scipy",
-              "dockerfile_repo_path": "/components_repo5/test-component1_repo5/Dockerfile",
-              "repo_name": "docker-bakery_repo5",
-              "created_time": "2023-06-27 13:39:36",
-              "last_updated_time": "2023-06-27 13:39:36",
-              "last_synced_time": "2023-06-27 13:39:36",
-              "component_name": "test-component1_repo5",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "86111cbb18dafcae5194978a0fae33f6fa4fca75"
-            },
-            {
-              "_id": 40,
-              "img_name": "docker-bakery-system/test-component2_repo1",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component2_repo1/Dockerfile",
-              "dockerfile_content": "# tensorflow_img:1.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo1/test-component2_repo1/requirements.txt .\n\nRUN pip install -r requirements.txt",
-              "dockerfile_repo_path": "/components_repo1/test-component2_repo1/Dockerfile",
-              "repo_name": "docker-bakery_repo1",
-              "created_time": "2023-06-27 13:39:53",
-              "last_updated_time": "2023-06-27 13:39:53",
-              "last_synced_time": "2023-06-27 13:39:53",
-              "component_name": "test-component2_repo1",
-              "architecture": "intel",
-              "files": [
-                {
-                  "name": "requirements.txt",
-                  "dependency_content": "tensorflow==2.12.0",
-                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component2_repo1/requirements.txt",
-                  "deps_repo_path": "/components_repo1/test-component2_repo1/requirements.txt"
-                }
-              ],
-              "commit_id": "7ae202c89ff02429181b44e32d1bb668818deb89"
-            },
-            {
-              "_id": 16,
-              "img_name": "docker-bakery-system/test-component2_repo2",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component2_repo2/Dockerfile",
-              "dockerfile_content": "# pandas_img:2.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo2/test-component2_repo2/requirements.txt .\n\nRUN pip install -r requirements.txt\n",
-              "dockerfile_repo_path": "/components_repo2/test-component2_repo2/Dockerfile",
-              "repo_name": "docker-bakery_repo2",
-              "created_time": "2023-06-27 13:39:35",
-              "last_updated_time": "2023-06-27 13:39:35",
-              "last_synced_time": "2023-06-27 13:39:35",
-              "component_name": "test-component2_repo2",
-              "architecture": "intel",
-              "files": [
-                {
-                  "name": "requirements.txt",
-                  "dependency_content": "pandas==2.0.2\n\n",
-                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component2_repo2/requirements.txt",
-                  "deps_repo_path": "/components_repo2/test-component2_repo2/requirements.txt"
-                }
-              ],
-              "commit_id": "b2a38a0a740e57751cb00083f70f692ff955efe0"
-            },
-            {
-              "_id": 19,
-              "img_name": "docker-bakery-system/test-component2_repo5",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo5/components_repo5/test-component2_repo5/Dockerfile",
-              "dockerfile_content": "# scipy_img:2.0\n\nFROM pip_img\n\nRUN pip -y install scipy",
-              "dockerfile_repo_path": "/components_repo5/test-component2_repo5/Dockerfile",
-              "repo_name": "docker-bakery_repo5",
-              "created_time": "2023-06-27 13:39:37",
-              "last_updated_time": "2023-06-27 13:39:37",
-              "last_synced_time": "2023-06-27 13:39:37",
-              "component_name": "test-component2_repo5",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "86111cbb18dafcae5194978a0fae33f6fa4fca75"
-            },
-            {
-              "_id": 41,
-              "img_name": "docker-bakery-system/test-component3_repo1",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component3_repo1/Dockerfile",
-              "dockerfile_content": "# tensorflow_img:1.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo1/test-component3_repo1/requirements.txt .\n\nRUN pip install -r requirements.txt",
-              "dockerfile_repo_path": "/components_repo1/test-component3_repo1/Dockerfile",
-              "repo_name": "docker-bakery_repo1",
-              "created_time": "2023-06-27 13:39:54",
-              "last_updated_time": "2023-06-27 13:39:54",
-              "last_synced_time": "2023-06-27 13:39:54",
-              "component_name": "test-component3_repo1",
-              "architecture": "intel",
-              "files": [
-                {
-                  "name": "requirements.txt",
-                  "dependency_content": "tensorflow==2.12.0",
-                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component3_repo1/requirements.txt",
-                  "deps_repo_path": "/components_repo1/test-component3_repo1/requirements.txt"
-                }
-              ],
-              "commit_id": "7ae202c89ff02429181b44e32d1bb668818deb89"
-            },
-            {
-              "_id": 17,
-              "img_name": "docker-bakery-system/test-component3_repo2",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component3_repo2/Dockerfile",
-              "dockerfile_content": "# pandas_img:3.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo2/test-component3_repo2/requirements.txt .\n\nRUN pip install -r requirements.txt\n",
-              "dockerfile_repo_path": "/components_repo2/test-component3_repo2/Dockerfile",
-              "repo_name": "docker-bakery_repo2",
-              "created_time": "2023-06-27 13:39:35",
-              "last_updated_time": "2023-06-27 13:39:35",
-              "last_synced_time": "2023-06-27 13:39:35",
-              "component_name": "test-component3_repo2",
-              "architecture": "intel",
-              "files": [
-                {
-                  "name": "requirements.txt",
-                  "dependency_content": "pandas==2.0.2\n\n",
-                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component3_repo2/requirements.txt",
-                  "deps_repo_path": "/components_repo2/test-component3_repo2/requirements.txt"
-                }
-              ],
-              "commit_id": "b2a38a0a740e57751cb00083f70f692ff955efe0"
-            },
-            {
-              "_id": 20,
-              "img_name": "docker-bakery-system/test-component3_repo5",
-              "tag": 1.0,
-              "children": [],
-              "parent": 5,
-              "sibling": null,
-              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo5/components_repo5/test-component3_repo5/Dockerfile",
-              "dockerfile_content": "# scipy_img:3.0\n\nFROM pip_img\n\nRUN pip -y install scipy",
-              "dockerfile_repo_path": "/components_repo5/test-component3_repo5/Dockerfile",
-              "repo_name": "docker-bakery_repo5",
-              "created_time": "2023-06-27 13:39:37",
-              "last_updated_time": "2023-06-27 13:39:37",
-              "last_synced_time": "2023-06-27 13:39:37",
-              "component_name": "test-component3_repo5",
-              "architecture": "intel",
-              "files": [],
-              "commit_id": "86111cbb18dafcae5194978a0fae33f6fa4fca75"
-            },
-            {
               "_id": 10,
               "img_name": "matplotlib_img",
               "tag": 1.0,
               "children": [],
+              "deployments": [],
               "parent": 5,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img5/Dockerfile",
               "dockerfile_content": "\nFROM pip_img:1.0\n\nRUN pip install matplotlib",
               "dockerfile_repo_path": null,
               "repo_name": null,
-              "created_time": "2023-06-27 13:39:32",
-              "last_updated_time": "2023-06-27 13:39:32",
-              "last_synced_time": "2023-06-27 13:39:32",
+              "created_time": "2023-07-02 22:57:09",
+              "last_updated_time": "2023-07-02 22:57:09",
+              "last_synced_time": "2023-07-02 22:57:09",
               "component_name": null,
               "architecture": "intel",
               "files": [],
@@ -671,19 +571,287 @@
               "img_name": "numpy_img",
               "tag": 1.0,
               "children": [],
+              "deployments": [],
               "parent": 5,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img4/Dockerfile",
               "dockerfile_content": "\nFROM pip_img:1.0\n\nRUN pip install numpy",
               "dockerfile_repo_path": null,
               "repo_name": null,
-              "created_time": "2023-06-27 13:39:32",
-              "last_updated_time": "2023-06-27 13:39:32",
-              "last_synced_time": "2023-06-27 13:39:32",
+              "created_time": "2023-07-02 22:57:09",
+              "last_updated_time": "2023-07-02 22:57:09",
+              "last_synced_time": "2023-07-02 22:57:09",
               "component_name": null,
               "architecture": "intel",
               "files": [],
               "commit_id": null
+            },
+            {
+              "_id": 39,
+              "img_name": "poojan23/docker-bakery-system_repo1-component1",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo1-component1-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component1_repo1/Dockerfile",
+              "dockerfile_content": "# eli5_img:1.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo1/test-component1_repo1/requirements.txt .\n\nRUN apt-get update && apt-get install -y bash\n\nRUN pip install -r requirements.txt\n\nENTRYPOINT [\"bash\", \"-c\", \"while true; do echo hello; sleep 5; done\"]\n",
+              "dockerfile_repo_path": "/components_repo1/test-component1_repo1/Dockerfile",
+              "repo_name": "docker-bakery_repo1",
+              "created_time": "2023-07-02 22:57:28",
+              "last_updated_time": "2023-07-02 22:57:28",
+              "last_synced_time": "2023-07-03 08:00:32",
+              "component_name": "repo1-component1",
+              "architecture": "intel",
+              "files": [
+                {
+                  "name": "requirements.txt",
+                  "dependency_content": "eli5==0.13.0",
+                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component1_repo1/requirements.txt",
+                  "deps_repo_path": "/components_repo1/test-component1_repo1/requirements.txt"
+                }
+              ],
+              "commit_id": "51ed9ef08c29afc178857316e9e6d5f379e5fc42"
+            },
+            {
+              "_id": 40,
+              "img_name": "poojan23/docker-bakery-system_repo1-component2",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo1-component2-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component2_repo1/Dockerfile",
+              "dockerfile_content": "# eli5_img:2.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo1/test-component2_repo1/requirements.txt .\n\nRUN pip install -r requirements.txt\n\nENTRYPOINT [\"/bin/sh\", \"-c\", \"while true; do sleep 5; done\"]\n",
+              "dockerfile_repo_path": "/components_repo1/test-component2_repo1/Dockerfile",
+              "repo_name": "docker-bakery_repo1",
+              "created_time": "2023-07-02 22:57:29",
+              "last_updated_time": "2023-07-02 22:57:29",
+              "last_synced_time": "2023-07-03 08:00:33",
+              "component_name": "repo1-component2",
+              "architecture": "intel",
+              "files": [
+                {
+                  "name": "requirements.txt",
+                  "dependency_content": "eli5==0.13.0",
+                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component2_repo1/requirements.txt",
+                  "deps_repo_path": "/components_repo1/test-component2_repo1/requirements.txt"
+                }
+              ],
+              "commit_id": "51ed9ef08c29afc178857316e9e6d5f379e5fc42"
+            },
+            {
+              "_id": 41,
+              "img_name": "poojan23/docker-bakery-system_repo1-component3",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo1-component3-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component3_repo1/Dockerfile",
+              "dockerfile_content": "# eli5_img:3.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo1/test-component3_repo1/requirements.txt .\n\nRUN pip install -r requirements.txt\n\n",
+              "dockerfile_repo_path": "/components_repo1/test-component3_repo1/Dockerfile",
+              "repo_name": "docker-bakery_repo1",
+              "created_time": "2023-07-02 22:57:29",
+              "last_updated_time": "2023-07-02 22:57:29",
+              "last_synced_time": "2023-07-03 08:00:35",
+              "component_name": "repo1-component3",
+              "architecture": "intel",
+              "files": [
+                {
+                  "name": "requirements.txt",
+                  "dependency_content": "eli5==0.13.0",
+                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo1/components_repo1/test-component3_repo1/requirements.txt",
+                  "deps_repo_path": "/components_repo1/test-component3_repo1/requirements.txt"
+                }
+              ],
+              "commit_id": "51ed9ef08c29afc178857316e9e6d5f379e5fc42"
+            },
+            {
+              "_id": 15,
+              "img_name": "poojan23/docker-bakery-system_repo2-component1",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo2-component1-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component1_repo2/Dockerfile",
+              "dockerfile_content": "# pandas_img:1.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo2/test-component1_repo2/requirements.txt .\n\nRUN pip install -r requirements.txt\n\nENTRYPOINT [\"/bin/sh\", \"-c\", \"while true; do sleep 5; done\"]\n",
+              "dockerfile_repo_path": "/components_repo2/test-component1_repo2/Dockerfile",
+              "repo_name": "docker-bakery_repo2",
+              "created_time": "2023-07-02 22:57:12",
+              "last_updated_time": "2023-07-02 22:57:12",
+              "last_synced_time": "2023-07-02 22:57:12",
+              "component_name": "repo2-component1",
+              "architecture": "intel",
+              "files": [
+                {
+                  "name": "requirements.txt",
+                  "dependency_content": "pandas==2.0.2\n\n",
+                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component1_repo2/requirements.txt",
+                  "deps_repo_path": "/components_repo2/test-component1_repo2/requirements.txt"
+                }
+              ],
+              "commit_id": "b6c0bf75cf360b59ed8f10cbf60ed334f672ce93"
+            },
+            {
+              "_id": 16,
+              "img_name": "poojan23/docker-bakery-system_repo2-component2",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo2-component2-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component2_repo2/Dockerfile",
+              "dockerfile_content": "# pandas_img:2.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo2/test-component2_repo2/requirements.txt .\n\nRUN pip install -r requirements.txt\n\nENTRYPOINT [\"/bin/sh\", \"-c\", \"while true; do sleep 5; done\"]\n\n",
+              "dockerfile_repo_path": "/components_repo2/test-component2_repo2/Dockerfile",
+              "repo_name": "docker-bakery_repo2",
+              "created_time": "2023-07-02 22:57:12",
+              "last_updated_time": "2023-07-02 22:57:12",
+              "last_synced_time": "2023-07-02 22:57:12",
+              "component_name": "repo2-component2",
+              "architecture": "intel",
+              "files": [
+                {
+                  "name": "requirements.txt",
+                  "dependency_content": "pandas==2.0.2\n\n",
+                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component2_repo2/requirements.txt",
+                  "deps_repo_path": "/components_repo2/test-component2_repo2/requirements.txt"
+                }
+              ],
+              "commit_id": "b6c0bf75cf360b59ed8f10cbf60ed334f672ce93"
+            },
+            {
+              "_id": 17,
+              "img_name": "poojan23/docker-bakery-system_repo2-component3",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo2-component3-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component3_repo2/Dockerfile",
+              "dockerfile_content": "# pandas_img:3.0\n\nFROM pip_img:1.0\n\nWORKDIR /app\n\nCOPY ./components_repo2/test-component3_repo2/requirements.txt .\n\nRUN pip install -r requirements.txt\n\nENTRYPOINT [\"/bin/sh\", \"-c\", \"while true; do sleep 5; done\"]\n",
+              "dockerfile_repo_path": "/components_repo2/test-component3_repo2/Dockerfile",
+              "repo_name": "docker-bakery_repo2",
+              "created_time": "2023-07-02 22:57:13",
+              "last_updated_time": "2023-07-02 22:57:13",
+              "last_synced_time": "2023-07-02 22:57:13",
+              "component_name": "repo2-component3",
+              "architecture": "intel",
+              "files": [
+                {
+                  "name": "requirements.txt",
+                  "dependency_content": "pandas==2.0.2\n\n",
+                  "deps_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo2/components_repo2/test-component3_repo2/requirements.txt",
+                  "deps_repo_path": "/components_repo2/test-component3_repo2/requirements.txt"
+                }
+              ],
+              "commit_id": "b6c0bf75cf360b59ed8f10cbf60ed334f672ce93"
+            },
+            {
+              "_id": 18,
+              "img_name": "poojan23/docker-bakery-system_repo5-component1",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo5-component1-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo5/components_repo5/test-component1_repo5/Dockerfile",
+              "dockerfile_content": "# theano:1.0\n\nFROM pip_img:1.0\n\nRUN pip install Theano\n\n",
+              "dockerfile_repo_path": "/components_repo5/test-component1_repo5/Dockerfile",
+              "repo_name": "docker-bakery_repo5",
+              "created_time": "2023-07-02 22:57:14",
+              "last_updated_time": "2023-07-02 22:57:14",
+              "last_synced_time": "2023-07-02 22:57:14",
+              "component_name": "repo5-component1",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "6c58343978be4f97851b8872789576cb0ddf53c1"
+            },
+            {
+              "_id": 19,
+              "img_name": "poojan23/docker-bakery-system_repo5-component2",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo5-component2-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo5/components_repo5/test-component2_repo5/Dockerfile",
+              "dockerfile_content": "# theano:2.0\n\nFROM pip_img:1.0\n\nRUN pip install Theano\n\n",
+              "dockerfile_repo_path": "/components_repo5/test-component2_repo5/Dockerfile",
+              "repo_name": "docker-bakery_repo5",
+              "created_time": "2023-07-02 22:57:14",
+              "last_updated_time": "2023-07-02 22:57:14",
+              "last_synced_time": "2023-07-02 22:57:14",
+              "component_name": "repo5-component2",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "6c58343978be4f97851b8872789576cb0ddf53c1"
+            },
+            {
+              "_id": 20,
+              "img_name": "poojan23/docker-bakery-system_repo5-component3",
+              "tag": 1.0,
+              "children": [],
+              "deployments": [
+                {
+                  "deployment_name": "repo5-component3-deployment-1",
+                  "env": "prod"
+                }
+              ],
+              "parent": 5,
+              "sibling": null,
+              "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo5/components_repo5/test-component3_repo5/Dockerfile",
+              "dockerfile_content": "# theano:3.0\n\nFROM pip_img:1.0\n\nRUN pip install Theano\n\n",
+              "dockerfile_repo_path": "/components_repo5/test-component3_repo5/Dockerfile",
+              "repo_name": "docker-bakery_repo5",
+              "created_time": "2023-07-02 22:57:15",
+              "last_updated_time": "2023-07-02 22:57:15",
+              "last_synced_time": "2023-07-02 22:57:15",
+              "component_name": "repo5-component3",
+              "architecture": "intel",
+              "files": [],
+              "commit_id": "6c58343978be4f97851b8872789576cb0ddf53c1"
             },
             {
               "_id": 4,
@@ -692,314 +860,210 @@
               "children": [
                 {
                   "_id": 12,
-                  "img_name": "docker-bakery-system/test-component1_repo10",
+                  "img_name": "poojan23/docker-bakery-system_repo10-component1",
                   "tag": 1.0,
                   "children": [
                     {
                       "_id": 11,
-                      "img_name": "docker-bakery-system/test-component1_repo11",
+                      "img_name": "poojan23/docker-bakery-system_repo11-component1",
                       "tag": 1.0,
                       "children": [
                         {
                           "_id": 29,
-                          "img_name": "docker-bakery-system/test-component1_repo12",
+                          "img_name": "poojan23/docker-bakery-system_repo12-component1",
                           "tag": 1.0,
                           "children": [],
+                          "deployments": [
+                            {
+                              "deployment_name": "repo12-component1-deployment-1",
+                              "env": "prod"
+                            }
+                          ],
                           "parent": 11,
                           "sibling": null,
                           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component1_repo12/Dockerfile",
-                          "dockerfile_content": "# django_img:1.0\n\nFROM docker-bakery-system/test-component1_repo11:1.0\n\nRUN pip install Django\n\n# me_poojan23\n",
+                          "dockerfile_content": "# django_img:1.0\n\nFROM poojan23/docker-bakery-system_repo11-component1:1.0\n\nRUN pip install Django\n\n# me_poojan23\n",
                           "dockerfile_repo_path": "/components_repo12/test-component1_repo12/Dockerfile",
                           "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 13:39:44",
-                          "last_updated_time": "2023-06-27 13:39:44",
-                          "last_synced_time": "2023-06-27 10:53:26",
-                          "component_name": "test-component1_repo12",
+                          "created_time": "2023-07-02 22:57:21",
+                          "last_updated_time": "2023-07-02 22:57:21",
+                          "last_synced_time": "2023-07-03 08:43:43",
+                          "component_name": "repo12-component1",
                           "architecture": "intel",
                           "files": [],
-                          "commit_id": "c3c7cc5f121452c98f59b11c4c89600c24931da5"
+                          "commit_id": "0200e5aa880f8a4631be0f73b148d7679df1e0b6"
                         },
                         {
                           "_id": 30,
-                          "img_name": "docker-bakery-system/test-component2_repo12",
+                          "img_name": "poojan23/docker-bakery-system_repo12-component2",
                           "tag": 1.0,
                           "children": [],
+                          "deployments": [
+                            {
+                              "deployment_name": "repo12-component2-deployment-1",
+                              "env": "prod"
+                            }
+                          ],
                           "parent": 11,
                           "sibling": null,
                           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component2_repo12/Dockerfile",
-                          "dockerfile_content": "# django_img:2.0\n\nFROM docker-bakery-system/test-component1_repo11:1.0\n\nRUN pip install Django",
+                          "dockerfile_content": "# django_img:2.0\n\nFROM poojan23/docker-bakery-system_repo11-component1:1.0\n\nRUN pip install Django",
                           "dockerfile_repo_path": "/components_repo12/test-component2_repo12/Dockerfile",
                           "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 13:39:45",
-                          "last_updated_time": "2023-06-27 13:39:45",
-                          "last_synced_time": "2023-06-27 10:53:27",
-                          "component_name": "test-component2_repo12",
+                          "created_time": "2023-07-02 22:57:22",
+                          "last_updated_time": "2023-07-02 22:57:22",
+                          "last_synced_time": "2023-07-03 08:43:44",
+                          "component_name": "repo12-component2",
                           "architecture": "intel",
                           "files": [],
-                          "commit_id": "c3c7cc5f121452c98f59b11c4c89600c24931da5"
+                          "commit_id": "0200e5aa880f8a4631be0f73b148d7679df1e0b6"
                         },
                         {
                           "_id": 31,
-                          "img_name": "docker-bakery-system/test-component3_repo12",
+                          "img_name": "poojan23/docker-bakery-system_repo12-component3",
                           "tag": 1.0,
                           "children": [],
+                          "deployments": [
+                            {
+                              "deployment_name": "repo12-component3-deployment-1",
+                              "env": "prod"
+                            }
+                          ],
                           "parent": 11,
                           "sibling": null,
                           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component3_repo12/Dockerfile",
-                          "dockerfile_content": "# django_img:3.0\n\nFROM docker-bakery-system/test-component1_repo11:1.0\n\nRUN pip install Django",
+                          "dockerfile_content": "# django_img:3.0\n\nFROM poojan23/docker-bakery-system_repo11-component1:1.0\n\nRUN pip install Django",
                           "dockerfile_repo_path": "/components_repo12/test-component3_repo12/Dockerfile",
                           "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 13:39:46",
-                          "last_updated_time": "2023-06-27 13:39:46",
-                          "last_synced_time": "2023-06-27 10:53:29",
-                          "component_name": "test-component3_repo12",
+                          "created_time": "2023-07-02 22:57:23",
+                          "last_updated_time": "2023-07-02 22:57:23",
+                          "last_synced_time": "2023-07-03 08:43:45",
+                          "component_name": "repo12-component3",
                           "architecture": "intel",
                           "files": [],
-                          "commit_id": "c3c7cc5f121452c98f59b11c4c89600c24931da5"
+                          "commit_id": "0200e5aa880f8a4631be0f73b148d7679df1e0b6"
                         },
                         {
                           "_id": 32,
-                          "img_name": "docker-bakery-system/test-component4_repo12",
+                          "img_name": "poojan23/docker-bakery-system_repo12-component4",
                           "tag": 1.0,
                           "children": [],
+                          "deployments": [
+                            {
+                              "deployment_name": "repo12-component4-deployment-1",
+                              "env": "prod"
+                            }
+                          ],
                           "parent": 11,
                           "sibling": null,
                           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component4_repo12/Dockerfile",
-                          "dockerfile_content": "# django_img:4.0\n\nFROM docker-bakery-system/test-component1_repo11:1.0\n\nRUN pip install Django\n",
+                          "dockerfile_content": "# django_img:4.0\n\nFROM poojan23/docker-bakery-system_repo11-component1:1.0\n\nRUN pip install Django\n\n# testing redeployment and manual sync-2\n",
                           "dockerfile_repo_path": "/components_repo12/test-component4_repo12/Dockerfile",
                           "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 13:39:46",
-                          "last_updated_time": "2023-06-27 13:39:46",
-                          "last_synced_time": "2023-06-27 10:53:31",
-                          "component_name": "test-component4_repo12",
+                          "created_time": "2023-07-02 22:57:23",
+                          "last_updated_time": "2023-07-04 06:32:29",
+                          "last_synced_time": "2023-07-04 06:37:45",
+                          "component_name": "repo12-component4",
                           "architecture": "intel",
                           "files": [],
-                          "commit_id": "c3c7cc5f121452c98f59b11c4c89600c24931da5"
+                          "commit_id": "0f89f431ae037c3a5e3b999fde6387690b9d5fc1"
                         },
                         {
                           "_id": 48,
-                          "img_name": "docker-bakery-system/test-component5_repo12",
+                          "img_name": "poojan23/docker-bakery-system_repo12-component5",
                           "tag": 1.0,
                           "children": [],
                           "parent": 11,
                           "sibling": null,
-                          "dockerfile_content": "# django_img:5.0\n\nFROM docker-bakery-system/test-component1_repo11:1.0\n\nRUN pip install Django\n\n# testing auto-sync\n",
+                          "deployments": [],
+                          "dockerfile_content": "# django_img:5.0\n\nFROM poojan23/docker-bakery-system_repo11-component1:1.0\n\nRUN pip install Django\n\n# Adding new component\n",
                           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component5_repo12/Dockerfile",
                           "dockerfile_repo_path": "/components_repo12/test-component5_repo12/Dockerfile",
                           "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 09:56:37",
-                          "last_updated_time": "2023-06-27 09:56:37",
-                          "last_synced_time": "2023-06-27 10:53:32",
-                          "component_name": "test-component5_repo12",
+                          "created_time": "2023-07-03 08:43:22",
+                          "last_updated_time": "2023-07-03 08:43:22",
+                          "last_synced_time": "2023-07-03 08:43:48",
+                          "component_name": "repo12-component5",
                           "architecture": "intel",
                           "files": [],
-                          "commit_id": "87999757cffedf9eb230f55370b1f5cfcd439c10"
-                        },
+                          "commit_id": "c1a21817fa54f32bc0417250c4ad5c417405304e"
+                        }
+                      ],
+                      "deployments": [
                         {
-                          "_id": 49,
-                          "img_name": "docker-bakery-system/test-component6_repo12",
-                          "tag": 1.0,
-                          "children": [],
-                          "parent": 11,
-                          "sibling": null,
-                          "dockerfile_content": "# django_img:6.0\n\nFROM docker-bakery-system/test-component1_repo11:1.0\n\nRUN pip install Django\n\n# testing auto-sync on component-6\n",
-                          "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component6_repo12/Dockerfile",
-                          "dockerfile_repo_path": "/components_repo12/test-component6_repo12/Dockerfile",
-                          "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 10:53:17",
-                          "last_updated_time": "2023-06-27 10:53:17",
-                          "last_synced_time": "2023-06-27 10:53:33",
-                          "component_name": "test-component6_repo12",
-                          "architecture": "intel",
-                          "files": [],
-                          "commit_id": "6e49daea83cd6bac04bb3be1012de5cf28c1cb0b"
+                          "deployment_name": "repo11-component1-deployment-1",
+                          "env": "prod"
                         }
                       ],
                       "parent": 12,
                       "sibling": null,
                       "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo11/components_repo11/test-component1_repo11/Dockerfile",
-                      "dockerfile_content": "# flask_img:1.0\n\nFROM docker-bakery-system/test-component1_repo10:1.0\n\nRUN pip install Flask\n\n# testing for manual sync\n",
+                      "dockerfile_content": "# flask_img:1.0\n\nFROM poojan23/docker-bakery-system_repo10-component1:1.0\n\nRUN pip install Flask\n\n# testing for manual sync\n",
                       "dockerfile_repo_path": "/components_repo11/test-component1_repo11/Dockerfile",
                       "repo_name": "docker-bakery_repo11",
-                      "created_time": "2023-06-27 13:39:32",
-                      "last_updated_time": "2023-06-27 13:39:32",
-                      "last_synced_time": "2023-06-27 10:59:34",
-                      "component_name": "test-component1_repo11",
+                      "created_time": "2023-07-02 22:57:09",
+                      "last_updated_time": "2023-07-02 22:57:09",
+                      "last_synced_time": "2023-07-03 08:00:38",
+                      "component_name": "repo11-component1",
                       "architecture": "intel",
                       "files": [],
-                      "commit_id": "724f55c3f83cb2c19ea01d4727062bfbac1699b2"
-                    },
-                    {
-                      "_id": 50,
-                      "img_name": "docker-bakery-system/test-component1_repo11",
-                      "tag": 1.1,
-                      "children": [
-                        {
-                          "_id": 51,
-                          "img_name": "docker-bakery-system/test-component1_repo12",
-                          "tag": 1.1,
-                          "children": [],
-                          "parent": 50,
-                          "sibling": "docker-bakery-system/test-component1_repo12:1.0",
-                          "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component1_repo12/Dockerfile",
-                          "dockerfile_content": "# django_img:1.0\n\nFROM docker-bakery-system/test-component1_repo11:1.1\n\nRUN pip install Django\n\n# me_poojan23",
-                          "dockerfile_repo_path": "/components_repo12/test-component1_repo12/Dockerfile",
-                          "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 10:58:23",
-                          "last_updated_time": "2023-06-27 10:58:23",
-                          "last_synced_time": "2023-06-27 10:58:23",
-                          "component_name": "test-component1_repo12",
-                          "architecture": "intel",
-                          "files": [],
-                          "commit_id": "daca55771e4fab2478db2e91fa27f332f4f9b7d9"
-                        },
-                        {
-                          "_id": 52,
-                          "img_name": "docker-bakery-system/test-component2_repo12",
-                          "tag": 1.1,
-                          "children": [],
-                          "parent": 50,
-                          "sibling": "docker-bakery-system/test-component2_repo12:1.0",
-                          "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component2_repo12/Dockerfile",
-                          "dockerfile_content": "# django_img:2.0\n\nFROM docker-bakery-system/test-component1_repo11:1.1\n\nRUN pip install Django",
-                          "dockerfile_repo_path": "/components_repo12/test-component2_repo12/Dockerfile",
-                          "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 10:58:37",
-                          "last_updated_time": "2023-06-27 10:58:37",
-                          "last_synced_time": "2023-06-27 10:58:37",
-                          "component_name": "test-component2_repo12",
-                          "architecture": "intel",
-                          "files": [],
-                          "commit_id": "cab9fccd65aec985083eec849755e1d7b71a9264"
-                        },
-                        {
-                          "_id": 53,
-                          "img_name": "docker-bakery-system/test-component3_repo12",
-                          "tag": 1.1,
-                          "children": [],
-                          "parent": 50,
-                          "sibling": "docker-bakery-system/test-component3_repo12:1.0",
-                          "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component3_repo12/Dockerfile",
-                          "dockerfile_content": "# django_img:3.0\n\nFROM docker-bakery-system/test-component1_repo11:1.1\n\nRUN pip install Django",
-                          "dockerfile_repo_path": "/components_repo12/test-component3_repo12/Dockerfile",
-                          "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 10:58:51",
-                          "last_updated_time": "2023-06-27 10:58:51",
-                          "last_synced_time": "2023-06-27 10:58:51",
-                          "component_name": "test-component3_repo12",
-                          "architecture": "intel",
-                          "files": [],
-                          "commit_id": "02da9c35a01b1b18a7fed3b834ff41f9a5295d54"
-                        },
-                        {
-                          "_id": 54,
-                          "img_name": "docker-bakery-system/test-component4_repo12",
-                          "tag": 1.1,
-                          "children": [],
-                          "parent": 50,
-                          "sibling": "docker-bakery-system/test-component4_repo12:1.0",
-                          "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component4_repo12/Dockerfile",
-                          "dockerfile_content": "# django_img:4.0\n\nFROM docker-bakery-system/test-component1_repo11:1.1\n\nRUN pip install Django",
-                          "dockerfile_repo_path": "/components_repo12/test-component4_repo12/Dockerfile",
-                          "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 10:59:05",
-                          "last_updated_time": "2023-06-27 10:59:05",
-                          "last_synced_time": "2023-06-27 10:59:05",
-                          "component_name": "test-component4_repo12",
-                          "architecture": "intel",
-                          "files": [],
-                          "commit_id": "c65d91d168e0dceef73247fff9de0f73189cdd7b"
-                        },
-                        {
-                          "_id": 55,
-                          "img_name": "docker-bakery-system/test-component5_repo12",
-                          "tag": 1.1,
-                          "children": [],
-                          "parent": 50,
-                          "sibling": "docker-bakery-system/test-component5_repo12:1.0",
-                          "dockerfile_content": "# django_img:5.0\n\nFROM docker-bakery-system/test-component1_repo11:1.1\n\nRUN pip install Django\n\n# testing auto-sync",
-                          "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component5_repo12/Dockerfile",
-                          "dockerfile_repo_path": "/components_repo12/test-component5_repo12/Dockerfile",
-                          "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 10:59:19",
-                          "last_updated_time": "2023-06-27 10:59:19",
-                          "last_synced_time": "2023-06-27 10:59:19",
-                          "component_name": "test-component5_repo12",
-                          "architecture": "intel",
-                          "files": [],
-                          "commit_id": "4485e7ff3619e6c39e8cee3efdabb694a0f900b7"
-                        },
-                        {
-                          "_id": 56,
-                          "img_name": "docker-bakery-system/test-component6_repo12",
-                          "tag": 1.1,
-                          "children": [],
-                          "parent": 50,
-                          "sibling": "docker-bakery-system/test-component6_repo12:1.0",
-                          "dockerfile_content": "# django_img:6.0\n\nFROM docker-bakery-system/test-component1_repo11:1.1\n\nRUN pip install Django\n\n# testing auto-sync on component-6",
-                          "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo12/components_repo12/test-component6_repo12/Dockerfile",
-                          "dockerfile_repo_path": "/components_repo12/test-component6_repo12/Dockerfile",
-                          "repo_name": "docker-bakery_repo12",
-                          "created_time": "2023-06-27 10:59:33",
-                          "last_updated_time": "2023-06-27 10:59:33",
-                          "last_synced_time": "2023-06-27 10:59:33",
-                          "component_name": "test-component6_repo12",
-                          "architecture": "intel",
-                          "files": [],
-                          "commit_id": "1f012763adc40c0123b8ace53f7ec3e5be900e7a"
-                        }
-                      ],
-                      "parent": 12,
-                      "sibling": "docker-bakery-system/test-component1_repo11:1.0",
-                      "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo11/components_repo11/test-component1_repo11/Dockerfile",
-                      "dockerfile_content": "# flask_img:1.0\n\nFROM docker-bakery-system/test-component1_repo10:1.0\n\nRUN pip install Flask\n\n# changing content of test-component-11\n",
-                      "dockerfile_repo_path": "/components_repo11/test-component1_repo11/Dockerfile",
-                      "repo_name": "docker-bakery_repo11",
-                      "created_time": "2023-06-27 10:58:02",
-                      "last_updated_time": "2023-06-27 10:58:02",
-                      "last_synced_time": "2023-06-27 10:58:02",
-                      "component_name": "test-component1_repo11",
-                      "architecture": "intel",
-                      "files": [],
-                      "commit_id": "acc810ff26be57676745e6988ac23a390017456f"
+                      "commit_id": "f2152983818a7f1011837ea5942e99947afe033d"
                     },
                     {
                       "_id": 13,
-                      "img_name": "docker-bakery-system/test-component2_repo11",
+                      "img_name": "poojan23/docker-bakery-system_repo11-component2",
                       "tag": 1.0,
                       "children": [],
+                      "deployments": [
+                        {
+                          "deployment_name": "repo11-component2-deployment-1",
+                          "env": "prod"
+                        }
+                      ],
                       "parent": 12,
                       "sibling": null,
                       "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo11/components_repo11/test-component2_repo11/Dockerfile",
-                      "dockerfile_content": "# flask_img:2.0\n\nFROM docker-bakery-system/test-component1_repo10:1.0\n\nRUN pip install Flask\n\n# hii repo11\n",
+                      "dockerfile_content": "# flask_img:2.0\n\nFROM poojan23/docker-bakery-system_repo10-component1:1.0\n\nRUN pip install Flask\n\n# hii repo11\n",
                       "dockerfile_repo_path": "/components_repo11/test-component2_repo11/Dockerfile",
                       "repo_name": "docker-bakery_repo11",
-                      "created_time": "2023-06-27 13:39:32",
-                      "last_updated_time": "2023-06-27 13:39:32",
-                      "last_synced_time": "2023-06-27 10:53:12",
-                      "component_name": "test-component2_repo11",
+                      "created_time": "2023-07-02 22:57:10",
+                      "last_updated_time": "2023-07-02 22:57:10",
+                      "last_synced_time": "2023-07-03 08:00:39",
+                      "component_name": "repo11-component2",
                       "architecture": "intel",
                       "files": [],
-                      "commit_id": "724f55c3f83cb2c19ea01d4727062bfbac1699b2"
+                      "commit_id": "f2152983818a7f1011837ea5942e99947afe033d"
                     },
                     {
                       "_id": 14,
-                      "img_name": "docker-bakery-system/test-component3_repo11",
+                      "img_name": "poojan23/docker-bakery-system_repo11-component3",
                       "tag": 1.0,
                       "children": [],
+                      "deployments": [
+                        {
+                          "deployment_name": "repo11-component3-deployment-1",
+                          "env": "prod"
+                        }
+                      ],
                       "parent": 12,
                       "sibling": null,
                       "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo11/components_repo11/test-component3_repo11/Dockerfile",
-                      "dockerfile_content": "# flask_img:3.0\n\nFROM docker-bakery-system/test-component1_repo10:1.0\n\nRUN pip install Flask\n\n# hey spd\n",
+                      "dockerfile_content": "# flask_img:3.0\n\nFROM poojan23/docker-bakery-system_repo10-component1:1.0\n\nRUN pip install Flask\n\n# hey spd\n",
                       "dockerfile_repo_path": "/components_repo11/test-component3_repo11/Dockerfile",
                       "repo_name": "docker-bakery_repo11",
-                      "created_time": "2023-06-27 13:39:33",
-                      "last_updated_time": "2023-06-27 13:39:33",
-                      "last_synced_time": "2023-06-27 10:53:13",
-                      "component_name": "test-component3_repo11",
+                      "created_time": "2023-07-02 22:57:11",
+                      "last_updated_time": "2023-07-02 22:57:11",
+                      "last_synced_time": "2023-07-03 08:00:40",
+                      "component_name": "repo11-component3",
                       "architecture": "intel",
                       "files": [],
-                      "commit_id": "724f55c3f83cb2c19ea01d4727062bfbac1699b2"
+                      "commit_id": "f2152983818a7f1011837ea5942e99947afe033d"
+                    }
+                  ],
+                  "deployments": [
+                    {
+                      "deployment_name": "repo10-component1-deployment-1",
+                      "env": "prod"
                     }
                   ],
                   "parent": 4,
@@ -1008,62 +1072,75 @@
                   "dockerfile_content": "# pygithub_img:1.0\n\nFROM pymongo_img:1.0\n\nRUN pip install PyGithub\n\n# testing repo10\n",
                   "dockerfile_repo_path": "/components_repo10/test-component1_repo10/Dockerfile",
                   "repo_name": "docker-bakery_repo10",
-                  "created_time": "2023-06-27 13:39:32",
-                  "last_updated_time": "2023-06-27 13:39:32",
-                  "last_synced_time": "2023-06-27 13:39:32",
-                  "component_name": "test-component1_repo10",
+                  "created_time": "2023-07-02 22:57:10",
+                  "last_updated_time": "2023-07-02 22:57:10",
+                  "last_synced_time": "2023-07-02 22:57:10",
+                  "component_name": "repo10-component1",
                   "architecture": "intel",
                   "files": [],
-                  "commit_id": "25cb0d7c9e8463005a81a18366129d57429f6617"
+                  "commit_id": "ac78cf8dffa2f2f44124d7343b29748d80c80b50"
                 },
                 {
                   "_id": 27,
-                  "img_name": "docker-bakery-system/test-component2_repo10",
+                  "img_name": "poojan23/docker-bakery-system_repo10-component2",
                   "tag": 1.0,
                   "children": [],
+                  "deployments": [
+                    {
+                      "deployment_name": "repo10-component2-deployment-1",
+                      "env": "prod"
+                    }
+                  ],
                   "parent": 4,
                   "sibling": null,
                   "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo10/components_repo10/test-component2_repo10/Dockerfile",
                   "dockerfile_content": "# pygithub_img:2.0\n\nFROM pymongo_img:1.0\n\nRUN pip install PyGithub",
                   "dockerfile_repo_path": "/components_repo10/test-component2_repo10/Dockerfile",
                   "repo_name": "docker-bakery_repo10",
-                  "created_time": "2023-06-27 13:39:43",
-                  "last_updated_time": "2023-06-27 13:39:43",
-                  "last_synced_time": "2023-06-27 13:39:43",
-                  "component_name": "test-component2_repo10",
+                  "created_time": "2023-07-02 22:57:20",
+                  "last_updated_time": "2023-07-02 22:57:20",
+                  "last_synced_time": "2023-07-02 22:57:20",
+                  "component_name": "repo10-component2",
                   "architecture": "intel",
                   "files": [],
-                  "commit_id": "25cb0d7c9e8463005a81a18366129d57429f6617"
+                  "commit_id": "ac78cf8dffa2f2f44124d7343b29748d80c80b50"
                 },
                 {
                   "_id": 28,
-                  "img_name": "docker-bakery-system/test-component3_repo10",
+                  "img_name": "poojan23/docker-bakery-system_repo10-component3",
                   "tag": 1.0,
                   "children": [],
+                  "deployments": [
+                    {
+                      "deployment_name": "repo10-component3-deployment-1",
+                      "env": "prod"
+                    }
+                  ],
                   "parent": 4,
                   "sibling": null,
                   "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/repos/docker-bakery_repo10/components_repo10/test-component3_repo10/Dockerfile",
                   "dockerfile_content": "# pygithub_img:3.0\n\nFROM pymongo_img:1.0\n\nRUN pip install PyGithub",
                   "dockerfile_repo_path": "/components_repo10/test-component3_repo10/Dockerfile",
                   "repo_name": "docker-bakery_repo10",
-                  "created_time": "2023-06-27 13:39:44",
-                  "last_updated_time": "2023-06-27 13:39:44",
-                  "last_synced_time": "2023-06-27 13:39:44",
-                  "component_name": "test-component3_repo10",
+                  "created_time": "2023-07-02 22:57:21",
+                  "last_updated_time": "2023-07-02 22:57:21",
+                  "last_synced_time": "2023-07-02 22:57:21",
+                  "component_name": "repo10-component3",
                   "architecture": "intel",
                   "files": [],
-                  "commit_id": "25cb0d7c9e8463005a81a18366129d57429f6617"
+                  "commit_id": "ac78cf8dffa2f2f44124d7343b29748d80c80b50"
                 }
               ],
+              "deployments": [],
               "parent": 5,
               "sibling": null,
               "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img6/Dockerfile",
               "dockerfile_content": "\nFROM pip_img:1.0\n\nCOPY . .\n\nRUN pip install -r requirements.txt",
               "dockerfile_repo_path": null,
               "repo_name": null,
-              "created_time": "2023-06-27 13:39:32",
-              "last_updated_time": "2023-06-27 13:39:32",
-              "last_synced_time": "2023-06-27 13:39:32",
+              "created_time": "2023-07-02 22:57:09",
+              "last_updated_time": "2023-07-02 22:57:09",
+              "last_synced_time": "2023-07-02 22:57:09",
               "component_name": null,
               "architecture": "intel",
               "files": [
@@ -1077,64 +1154,48 @@
               "commit_id": null
             }
           ],
+          "deployments": [],
           "parent": 6,
           "sibling": null,
           "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img3/Dockerfile",
           "dockerfile_content": "\nFROM python_img:1.0\n\nRUN apt-get -y update\nRUN apt-get -y install python3-pip",
           "dockerfile_repo_path": null,
           "repo_name": null,
-          "created_time": "2023-06-27 13:39:32",
-          "last_updated_time": "2023-06-27 13:39:32",
-          "last_synced_time": "2023-06-27 13:39:32",
-          "component_name": null,
-          "architecture": "intel",
-          "files": [],
-          "commit_id": null
-        },
-        {
-          "_id": 57,
-          "img_name": "testing_img",
-          "tag": 1.0,
-          "children": [],
-          "parent": 6,
-          "sibling": null,
-          "dockerfile_content": "FROM python_img:1.0",
-          "dockerfile_local_path": null,
-          "dockerfile_repo_path": null,
-          "repo_name": null,
-          "created_time": "2023-06-28 08:01:29",
-          "last_updated_time": "2023-06-28 08:01:29",
-          "last_synced_time": "2023-06-28 08:01:29",
+          "created_time": "2023-07-02 22:57:09",
+          "last_updated_time": "2023-07-02 22:57:09",
+          "last_synced_time": "2023-07-02 22:57:09",
           "component_name": null,
           "architecture": "intel",
           "files": [],
           "commit_id": null
         }
       ],
+      "deployments": [],
       "parent": 1,
       "sibling": null,
       "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/img1/Dockerfile",
-      "dockerfile_content": "\nFROM base_img:1.0\n\nRUN apt-get -y update\nRUN apt-get -y install python3",
+      "dockerfile_content": "\nFROM base_img:1.0\n\nRUN apt-get -y update\nRUN apt-get -y install python3\n \nENTRYPOINT [\"sleep 15\"]",
       "dockerfile_repo_path": null,
       "repo_name": null,
-      "created_time": "2023-06-27 13:39:32",
-      "last_updated_time": "2023-06-27 13:39:32",
-      "last_synced_time": "2023-06-27 13:39:32",
+      "created_time": "2023-07-02 22:57:09",
+      "last_updated_time": "2023-07-02 22:57:09",
+      "last_synced_time": "2023-07-02 22:57:09",
       "component_name": null,
       "architecture": "intel",
       "files": [],
       "commit_id": null
     }
   ],
+  "deployments": [],
   "parent": null,
   "sibling": null,
   "dockerfile_local_path": "/Users/shahpoojandikeshkumar/Desktop/SI/docker_files/base_img/Dockerfile",
   "dockerfile_content": "FROM ubuntu",
   "dockerfile_repo_path": null,
   "repo_name": null,
-  "created_time": "2023-06-27 13:39:32",
-  "last_updated_time": "2023-06-27 13:39:32",
-  "last_synced_time": "2023-06-27 13:39:32",
+  "created_time": "2023-07-02 22:57:09",
+  "last_updated_time": "2023-07-02 22:57:09",
+  "last_synced_time": "2023-07-02 22:57:09",
   "component_name": null,
   "architecture": "intel",
   "files": [],

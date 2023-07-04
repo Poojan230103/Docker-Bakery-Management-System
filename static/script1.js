@@ -72,6 +72,13 @@ function createNode(name, levelCode, node_id) {
     delete_span.appendChild(document.createTextNode('Delete Node'));
     delete_node.appendChild(delete_span);
 
+    // delete siblings
+    const delete_siblings = document.createElement('div');
+    delete_siblings.classList.add('btn', 'btn-default', 'btn-sm', 'delete-siblings');
+    const delete_siblings_span = document.createElement('span');
+    delete_siblings_span.appendChild(document.createTextNode('Delete All Siblings'));
+    delete_siblings.appendChild(delete_siblings_span);
+
     treeview__level_btns.appendChild(level_add);
     treeview__level_btns.appendChild(level_remove);
     treeview__level_btns.appendChild(update_node);
@@ -79,6 +86,7 @@ function createNode(name, levelCode, node_id) {
     treeview__level_btns.appendChild(add_child);
     treeview__level_btns.appendChild(edit_node);
     treeview__level_btns.appendChild(delete_node);
+    treeview__level_btns.appendChild(delete_siblings);
 
     treeview__level.appendChild(level_title);
     treeview__level.appendChild(treeview__level_btns);

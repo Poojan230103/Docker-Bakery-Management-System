@@ -10,9 +10,9 @@ client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.m
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'
-my_git = Github("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")
+my_git = Github("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")
 
-old_to_mirror = {}
+old_to_mirror = {}                                      # dictionary to map the upgraded nodes with their sibling.
 next_id = records.count_documents({}) + 1
 
 
@@ -127,6 +127,14 @@ def sync_new_node(node, repo_name):
         contents = response.content
         contents = str(contents, 'UTF-8')
         new_node["dockerfile_content"] = contents
+        contents = contents.splitlines()
+        parent = None
+        for line in contents:
+            if line.__contains__("FROM"):
+                parent = line.split()[1]
+        repo_parent_node = records.find_one({"img_name": parent.split(':')[0], "tag": float(parent.split(':')[1])})
+        if repo_parent_node is None:
+            return 1
         new_node["files"].clear()
         for dep in node["files"]:
             file = my_repo.get_contents(dep["deps_repo_path"])   # updating the contents of requirements.txt
@@ -136,21 +144,23 @@ def sync_new_node(node, repo_name):
             dep["dependency_content"] = contents
             new_node["files"].append(dep)
         new_node["created_time"] = new_node["last_synced_time"] = new_node["last_updated_time"] = str(datetime.now().replace(microsecond=0))
+        element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)             # finding the highest id
+        new_node["_id"] = element_with_highest_id["_id"] + 1
         global next_id
-        new_node["_id"] = next_id
-        next_id += 1
+        next_id = new_node["_id"] + 1
         old_to_mirror[node["_id"]] = new_node["_id"]
-        new_node["tag"] = round(node["tag"] + 0.1, 10)  # updating the tag of the image
+        new_node["tag"] = round(node["tag"] + 0.1, 10)          # updating the tag of the image
         parameter = {                                           # building new docker image
             "repo_name": new_node["repo_name"],
-            "dockerfile": new_node["dockerfile_content"],
-            "dockerfile_path": new_node["dockerfile_repo_path"],
-            "component_name": new_node["component_name"],
-            "tag": new_node["tag"],
-        }
+            "dockerfile": new_node["dockerfile_content"], "dockerfile_path": new_node["dockerfile_repo_path"],
+            "component_name": new_node["component_name"], "tag": new_node["tag"]}
         build_image(parameter)
+        # -------------------------------------- call redeploy_component function here --------------------------------- #
+        redeploy_components(new_node)
+        # --------------------------------------  --------------------------------- #
         new_node["sibling"] = node["_id"]                           # assigning sibling
-        parent_node = records.find_one({"_id": node["parent"]})
+        # parent_node = records.find_one({"_id": node["parent"]})
+        parent_node = repo_parent_node
         parent_node["children"].append(new_node["_id"])            # adding the new child to parent
         new_node["parent"] = parent_node["_id"]
         commits = my_repo.get_commits(sha=my_repo.default_branch)[0]
@@ -162,6 +172,7 @@ def sync_new_node(node, repo_name):
         records.replace_one({"_id": parent_node["_id"]}, parent_node)
     node["last_synced_time"] = str(datetime.now().replace(microsecond=0))
     records.replace_one({"_id": node["_id"]}, node)
+    return 0
 
 
 def sync_same_node(node, repo_name):
@@ -195,6 +206,20 @@ def sync_same_node(node, repo_name):
         contents = response.content
         contents = str(contents, 'UTF-8')
         node["dockerfile_content"] = contents
+        contents = contents.splitlines()
+        parent = None
+        for line in contents:
+            if line.__contains__("FROM"):
+                parent = line.split()[1]
+        repo_parent_node = records.find_one({"img_name": parent.split(':')[0], "tag": float(parent.split(':')[1])})
+        if repo_parent_node is None:
+            return 1
+        if repo_parent_node["_id"] != node["parent"]:           # if the parent has changed in the new version of the dockerfile and the new parent exists
+            old_parent_node = records.find_one({"_id": node["parent"]})
+            old_parent_node["children"].erase(node["_id"])
+            repo_parent_node["children"].append(node["_id"])
+            records.replace_one({"_id": old_parent_node["_id"]}, old_parent_node)
+            records.replace_one({"_id": repo_parent_node["_id"]}, repo_parent_node)
         updated_dependency = []
         for dep in node["files"]:
             file = my_repo.get_contents(dep["deps_repo_path"])   # updating the contents of requirements.txt
@@ -207,6 +232,9 @@ def sync_same_node(node, repo_name):
         node["files"] = updated_dependency
         parameter = {"repo_name": node["repo_name"], "dockerfile": node["dockerfile_content"], "dockerfile_path": node["dockerfile_repo_path"], "component_name": node["component_name"], "tag": node["tag"]}
         build_image(parameter)
+        # -------------------------------------- call redeploy_component function here --------------------------------- #
+        redeploy_components(node)
+        # --------------------------------------  --------------------------------- #
         commits = my_repo.get_commits(sha=my_repo.default_branch)[0]
         node["commit_id"] = commits.sha                                     # updating the commit sha of the node.
         for ids in node["children"]:
@@ -214,15 +242,17 @@ def sync_same_node(node, repo_name):
         node["last_updated_time"] = str(datetime.now().replace(microsecond=0))
     node["last_synced_time"] = str(datetime.now().replace(microsecond=0))
     records.replace_one({"_id": node["_id"]}, node)
+    return 0
 
 
 def add_new_component(repo_name, components):
     for comp in components.keys():
         if records.count_documents({"component_name": comp}) == 0:
             my_repo = my_git.get_repo(f"Poojan230103/{repo_name}")
-            name = 'docker-bakery-system/' + comp + ':1.0'
+            name = 'poojan23/docker-bakery-system_' + comp + ':1.0'
             new_node = treenode(name)
-            new_node._id = records.count_documents({}) + 1
+            element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)             # finding the highest id
+            new_node._id = element_with_highest_id["_id"] + 1
             new_node.repo_name = repo_name  # name of repository
             docker_path = root_path + '/' + repo_name + components[comp][1:]  # local path of dockerfile
             new_node.dockerfile_local_path = docker_path
@@ -247,6 +277,8 @@ def add_new_component(repo_name, components):
                     requirements_path = match.group(1)
             par_data = parent.split(':')
             par = records.find_one({"img_name": par_data[0], "tag": float(par_data[1])})
+            if par is None:
+                continue
             new_node.parent = par["_id"]  # storing the parent
             if requirements_path:  # this path is relative to the .sh file
                 new_dep = dependencies("requirements.txt")
@@ -264,11 +296,8 @@ def add_new_component(repo_name, components):
             new_node.commit_id = commits.sha  # storing the commit sha of the commit.
             parameter = {
                 "repo_name": new_node.repo_name,
-                "dockerfile": new_node.dockerfile_content,
-                "dockerfile_path": new_node.dockerfile_repo_path,
-                "component_name": new_node.component_name,
-                "tag": new_node.tag,
-            }
+                "dockerfile": new_node.dockerfile_content, "dockerfile_path": new_node.dockerfile_repo_path,
+                "component_name": new_node.component_name, "tag": new_node.tag}
             build_image(parameter)
             json_data = json.dumps(new_node, default=lambda o: o.__dict__, indent=4)
             json_data = json.loads(json_data)
@@ -279,6 +308,23 @@ def add_new_component(repo_name, components):
 def dfs_new_node(old_child_id, old_par_node, new_par_node):       # building the whole tree structure.
     old_child_node = records.find_one({"_id": old_child_id})
     new_child_node = copy.deepcopy(old_child_node)
+    if new_child_node["repo_name"]:
+        child_repo = my_git.get_repo(f'''Poojan230103/{new_child_node["repo_name"]}''')
+        file = child_repo.get_contents(new_child_node["dockerfile_repo_path"])
+        response = requests.get(file.download_url)
+        dockerfile_contents = response.content
+        contents = str(dockerfile_contents, 'UTF-8')
+        contents = contents.splitlines()
+        parent = None
+        for line in contents:
+            if line.__contains__("FROM"):
+                parent = line.split()[1]
+        repo_parent_node = records.find_one({"img_name": parent.split(':')[0], "tag": float(parent.split(':')[1])})
+        if repo_parent_node is None:
+            return
+        elif repo_parent_node["_id"] != old_par_node["_id"]:
+            new_par_node = repo_parent_node
+        new_child_node["dockerfile_content"] = '\n'.join(contents)
     global next_id
     new_child_node["_id"] = next_id               # assigned id to the new child
     next_id += 1
@@ -320,6 +366,9 @@ def dfs_new_node(old_child_id, old_par_node, new_par_node):       # building the
                 requirements = dep["dependency_content"]
         parameter = {"dockerfile": new_child_node["dockerfile_content"], "img_name": new_child_node["img_name"], "tag": new_child_node["tag"], "requirements": requirements}
     build_image(parameter)
+    # -------------------------------------- call redeploy_component function here --------------------------------- #
+    redeploy_components(new_child_node)
+    # --------------------------------------  --------------------------------- #
     new_child_node["created_time"] = new_child_node["last_synced_time"] = new_child_node["last_updated_time"] = str(datetime.now().replace(microsecond=0))
     for child in old_child_node["children"]:
         dfs_new_node(child, old_child_node, new_child_node)
@@ -330,18 +379,6 @@ def dfs_new_node(old_child_id, old_par_node, new_par_node):       # building the
         new_child_node["sibling"] = highest_tag_node["_id"]
         first_mirror_img = False
     records.insert_one(new_child_node)
-
-
-def autosync_new_node(repo_name):
-    my_repo = my_git.get_repo(f"Poojan230103/{repo_name}")
-    file = my_repo.get_contents('/build-component.sh')
-    response = requests.get(file.download_url)
-    shell_script = str(response.content, 'UTF-8')
-    components = parse_script(shell_script)
-    add_new_component(repo_name, components)        # checking and building new components are added
-    for comp in components.keys():
-        node = records.find_one({"repo_name": repo_name, "component_name": comp}, sort=[("tag", -1)], limit=1)     # node --> the node with the highest tag
-        sync_new_node(node, repo_name)
 
 
 def dfs_same_node(node_id, update_time=True):             # recursively re-building the subtree on update of the parent node
@@ -358,11 +395,26 @@ def dfs_same_node(node_id, update_time=True):             # recursively re-build
                 requirements = dep["dependency_content"]
         parameter = {"dockerfile": child_node["dockerfile_content"], "img_name": child_node["img_name"], "tag": child_node["tag"], "requirements": requirements}
         status = build_image(parameter)
+        # -------------------------------------- call redeploy_component function here --------------------------------- #
+        redeploy_components(child_node)
+        # --------------------------------------  --------------------------------- #
         for ids_child in child_node["children"]:
             dfs_same_node(ids_child)
     if update_time:
         child_node["last_updated_time"] = child_node["last_synced_time"] = str(datetime.now().replace(microsecond=0))
         records.replace_one({"_id": child_node["_id"]}, child_node)
+
+
+def autosync_new_node(repo_name):
+    my_repo = my_git.get_repo(f"Poojan230103/{repo_name}")
+    file = my_repo.get_contents('/build-component.sh')
+    response = requests.get(file.download_url)
+    shell_script = str(response.content, 'UTF-8')
+    components = parse_script(shell_script)
+    add_new_component(repo_name, components)        # checking and building new components are added
+    for comp in components.keys():
+        node = records.find_one({"repo_name": repo_name, "component_name": comp}, sort=[("tag", -1)], limit=1)     # node --> the node with the highest tag
+        sync_new_node(node, repo_name)
 
 
 def autosync_same_node(repo_name):
@@ -371,25 +423,30 @@ def autosync_same_node(repo_name):
     response = requests.get(file.download_url)
     shell_script = str(response.content, 'UTF-8')
     components = parse_script(shell_script)
-    print(components)
-    add_new_component(repo_name, components)  # checking and building if new components are added
+    add_new_component(repo_name, components)        # checking and building if new components are added
     for comp in components.keys():
         node = records.find_one({"repo_name": repo_name, "component_name": comp}, sort=[("tag", -1)], limit=1)      # finding the node with highest tag.
         sync_same_node(node, repo_name)
 
 
-delete_status = True
-
-
-def delete_subtree(node_id):
+def delete_subtree(node_id):                                # this function deletes a node and its subtree.
     node = records.find_one({"_id": node_id})
     for child_id in node["children"]:
         delete_subtree(child_id)
-
     parameters = {"img_name": node["img_name"], "tag": node["tag"]}
     status = delete_image(parameters)
     if status == "Success":
+        next_sibling_node = records.find_one({"sibling": node["_id"]})
+        if next_sibling_node is not None:
+            next_sibling_node["sibling"] = node["sibling"]
+            records.replace_one({"_id": next_sibling_node["_id"]}, next_sibling_node)
+        parent_node = records.find_one({"_id": node["parent"]})
+        parent_node["children"].remove(node["_id"])
+        records.replace_one({"_id": parent_node["_id"]}, parent_node)
         records.delete_one({"_id": node["_id"]})
 
 
-
+def redeploy_components(node):                          # this function re-deploy all the deployments that were made using this image.
+    for deployment in node["deployments"]:
+        parameters = {"image_name": node["img_name"], "tag": node["tag"], "component_name": node["component_name"], "deployment_name": deployment["deployment_name"]}
+        requests.post("http://127.0.0.1:9000/deploy_component", data=parameters)
