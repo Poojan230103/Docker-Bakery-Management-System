@@ -1,4 +1,5 @@
 import os, requests, time
+from dotenv import load_dotenv, dotenv_values
 from django.shortcuts import render, redirect
 import pymongo
 import json
@@ -11,11 +12,13 @@ from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sy
 from django.contrib import messages
 
 
+load_dotenv()
 client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.mongodb.net/?retryWrites=true&w=majority")
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'         # root path --> contains all the repos
-my_git = Github("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")
+my_git = Github(os.getenv("GITHUB_ACCESS_TOKEN"))
+print(os.getenv("GITHUB_ACCESS_TOKEN"))
 
 
 def get_data():     # fetches the data from the database and converts it into hierarchical format to display it in UI

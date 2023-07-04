@@ -1,17 +1,18 @@
 import re,pytz,copy, json, time, os
 from datetime import datetime
+from dotenv import load_dotenv, dotenv_values
 import pymongo
 from myapp.models import treenode, dependencies
 from github import Github
 import requests
 
 
+load_dotenv()
 client = pymongo.MongoClient("mongodb+srv://admin:me_Poojan23@cluster0.z9bxxjw.mongodb.net/?retryWrites=true&w=majority")
 db = client.get_database('myDB')
 records = db['Images']
 root_path = '/Users/shahpoojandikeshkumar/Desktop/SI/repos'
-my_git = Github("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")
-
+my_git = Github(os.getenv("GITHUB_ACCESS_TOKEN"))
 old_to_mirror = {}                                      # dictionary to map the upgraded nodes with their sibling.
 next_id = records.count_documents({}) + 1
 
