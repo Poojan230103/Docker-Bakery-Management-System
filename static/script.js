@@ -28,7 +28,7 @@ $(function() {
     target = $(this);
     let liElm = target.closest("li");
     let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
-    let url = '/manual_sync?sync_type=0&node_id=' + node_id
+    let url = '/manual_sync_on_node?sync_type=0&node_id=' + node_id
     window.location.replace(url)
     $(this).siblings().toggleClass("in");
   });
@@ -39,7 +39,7 @@ $(function() {
     let liElm = target.closest("li");
     let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
     // console.log("hello from update " + node_id)
-    let url = '/manual_sync?sync_type=1&node_id=' + node_id
+    let url = '/manual_sync_on_node?sync_type=1&node_id=' + node_id
     window.location.replace(url)
     $(this).siblings().toggleClass("in");
   });
@@ -49,7 +49,7 @@ $(function() {
     target = $(this);
     let liElm = target.closest("li");
     let node_id = `${+liElm.find("[data-node_id]").attr("data-node_id")}`;
-    let url = '/add_node?node_id=' + node_id
+    let url = '/add_child_component?node_id=' + node_id
     // window.location.replace(url)
     window.location.href = url
     $(this).siblings().toggleClass("in");

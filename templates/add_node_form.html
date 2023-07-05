@@ -33,10 +33,9 @@
          </div>
          <div class="form-container">
             <div class="form-inner">
-               <form method="POST" class="new_comp">
+               <form method="POST" action="/add_child_component" class="new_comp">
                    {% csrf_token %}
 {#                   if user wants to add new component#}
-                   <input type="hidden" name="source_type" value="component">
                    <div class="field">
                      <input type="number" name="parent" value="{{parent_id}}" readonly>
                   </div>
@@ -44,7 +43,7 @@
                      <input type="text" placeholder="Repository Name" name="repo_name" required>
                   </div>
                    <div class="field">
-                     <input type="text" placeholder="Component Name" name="comp_name" required>
+                     <input type="text" placeholder="Component Name" name="component_name" required>
                   </div>
                    <div class="field">
                      <input type="text" placeholder="Tag" name="Tag" required>
@@ -55,10 +54,9 @@
                   </div>
                </form>
 
-               <form method="post" class="new_img">
+               <form method="post" action="/add_child_image" class="new_img">
                    {% csrf_token %}
 {#                   if user just wants to store his image#}
-                   <input type="hidden" name="source_type" value="no_component">
                    <div class="field">
                      <input type="number" name="parent" value="{{ parent_id }}" readonly>
                   </div>
