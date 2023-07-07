@@ -15,7 +15,7 @@ class treenode:
         self.dockerfile_local_path = None
         self.dockerfile_repo_path = None
         self.repo_name = None
-        self.created_time = self.last_updated_time = self.last_synced_time = str(datetime.now().replace(microsecond=0))
+        self.created_time = self.last_updated_time = self.last_synced_time = str(datetime.utcnow().replace(microsecond=0))
         self.component_name = None
         self.architecture = "arm" if "arm" in img_name else "intel"
         self.files = []
@@ -26,7 +26,7 @@ class dependencies:
     def __init__(self, name):
         self.name = name
         self.dependency_content = None
-        self.deps_local_path = None
-        self.deps_repo_path = None
+        self.dependency_local_path = None
+        self.dependency_repo_path = None
 
 

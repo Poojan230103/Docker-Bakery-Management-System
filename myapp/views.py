@@ -2,14 +2,13 @@ from multiprocessing import Process
 import json
 import os
 import logging
-import requests
 from dotenv import load_dotenv
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import pymongo
 from github import Github
 from myapp.models import treenode, dependencies
-from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sync_new_node, build_image, sync_same_node, dfs_same_node, delete_subtree, redeploy_components, store_in_mongodb, get_data_from_repository
+from myapp.functions import parse_script, parse_dockerfile, create_hierarchy, sync_new_node, build_image, sync_same_node, dfs_same_node, delete_subtree, redeploy_components, store_in_mongodb, get_data_from_repository, get_parameters, get_parameters_from_treenode, get_dependencies
 
 
 logging.basicConfig(level=logging.DEBUG, filename="logs.log", format="%(asctime)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
@@ -36,29 +35,33 @@ def get_data():                                                            # fet
 
 
 def index(request):             # home-page
-    get_data()                  # fetches data from DB
-    return render(request, 'index.html')
+    dropdown_list = records.find({"repo_name": {"$ne": None}})          # providing user a list of images which he/she can sync
+    dropdown_options = []
+    for list_item in dropdown_list:
+        if list_item["img_name"] not in dropdown_options:
+            dropdown_options.append(list_item["img_name"])
+    get_data()                                                                      # fetches data from DB
+    return render(request, 'index.html', {"dropdown_options": dropdown_options})
 
 
 def add_child_component(request):                  # addition of new node through UI
     if request.method == 'GET':
-        parent_id = int(request.GET.get('node_id'))
-        return render(request, 'add_node_form.html', {"parent_id": parent_id})
+        return render(request, 'add_node_form.html', {"parent_id": int(request.GET.get('node_id'))})
     if request.method == "POST":
         component_name = request.POST['component_name']
-        parent = request.POST['parent']
+        parent = int(request.POST['parent'])
         img_name = 'poojan23/docker-bakery-system_' + request.POST['component_name']
         if records.count_documents({"img_name": img_name, "tag": float(request.POST['Tag'])}):      # check whether the img already exists
             messages.error(request, "Image Already Exists")
             return redirect('/')
         else:
             sibling_node = records.find_one({"img_name": img_name}, sort=[("tag", -1)], limit=1)     # image with the same name and latest tag.
-            if sibling_node:                                # checking whether the tag is incremental
+            if sibling_node:                                                # checking whether the tag is incremental
                 if float(request.POST['Tag']) <= sibling_node["tag"]:       # throw an error that tag should be incremental
                     messages.error(request, "Tag should be incremental")
                     return redirect('/')
             try:
-                repository = github_client.get_repo(f"Poojan230103/{request.POST['repo_name']}")
+                repository = github_client.get_repo(f"{os.getenv('REPO_BASE')}/{request.POST['repo_name']}")
             except Exception:
                 messages.error(request, "Repository does not exist")
                 return redirect('/')
@@ -69,9 +72,10 @@ def add_child_component(request):                  # addition of new node throug
                 return redirect('/')
             new_node = make_new_component_node(repository, request.POST['repo_name'], img_name, request.POST['Tag']
                                                , request.POST['parent'], request.POST['component_name'], components[component_name][1:])   # making new tree-node
-            parameter = {"repo_name": new_node.repo_name, "dockerfile": new_node.dockerfile_content,
-                         "dockerfile_path": new_node.dockerfile_repo_path, "component_name": new_node.component_name,
-                         "tag": new_node.tag}
+            if not if_parent_matches(parent, new_node.dockerfile_content):
+                messages.error(request, "Parent does not Match")
+                return redirect('/')
+            parameter = get_parameters_from_treenode(new_node)
             status = build_image(parameter)
             if status == "Success":
                 store_in_mongodb(new_node)                                               # storing in mongodb
@@ -84,6 +88,7 @@ def add_child_component(request):                  # addition of new node throug
         return redirect('/')
 
 
+# in the below function, it is assumed that dockerfile and requirements.txt are in the same path
 def add_child_image(request):                  # addition of new node through UI
     if request.method == "POST":
         parent_id = int(request.POST['parent'])
@@ -98,6 +103,7 @@ def add_child_image(request):                  # addition of new node through UI
                 messages.error(request, "Tag should be incremental")
                 return redirect('/')
         parent_name, requirements_path = parse_dockerfile(dockerfile)           # parsing the dockerfile
+        # logging.debug(parent_name, requirements_path)
         if parent_name is None:
             messages.error(request, "Parent not specified")
             return redirect('/')
@@ -107,7 +113,7 @@ def add_child_image(request):                  # addition of new node through UI
             messages.error(request, "Parent Name did not Match.")
             return redirect('/')
         new_node = make_new_image_node(request.POST['img_name'], request.POST['Tag'], parent_id, dockerfile, requirements)
-        parameter = {"dockerfile": new_node.dockerfile_content, "img_name": new_node.img_name, "tag": new_node.tag, "requirements": request.POST['Requirements']}
+        parameter = get_parameters_from_treenode(new_node)
         status = build_image(parameter)
         if status == "Success":
             store_in_mongodb(new_node)
@@ -119,8 +125,9 @@ def add_child_image(request):                  # addition of new node through UI
     return redirect('/')
 
 
-def manual_sync_on_image(request):
+def manual_sync_on_image(request):                  # manual sync by entering the image name in UI.
     img_name = request.POST.get('img_name')
+    logging.info(img_name)
     sync_type = int(request.POST['sync_type'])
     node = records.find_one({"img_name": img_name}, sort=[("tag", -1)], limit=1)
     if node is None:
@@ -143,14 +150,14 @@ def manual_sync_on_image(request):
     return redirect('/')
 
 
-def manual_sync_on_node(request):
+def manual_sync_on_node(request):                   # manual sync by right-clicking on a node
     node_id = int(request.GET.get('node_id'))
     selected_node = records.find_one({"_id": node_id})
-    if selected_node["repo_name"] is None:
+    if selected_node["repo_name"] is None:                                  # check whether the node has a repo or not
         messages.error(request, "Cannot Sync Image without Repository")
         return redirect('/')
     max_tag_node = records.find_one({"img_name": selected_node["img_name"]}, sort=[("tag", -1)], limit=1)
-    if selected_node["tag"] != max_tag_node["tag"]:  # checking whether it is the latest node or not. Sync only if it is the latest node.
+    if selected_node["tag"] != max_tag_node["tag"]:                 # checking whether it is the latest node or not. Sync only if it is the latest node.
         messages.info(request, 'Not the latest Image.')
         return redirect('/')
     repo_name = selected_node["repo_name"]
@@ -179,23 +186,16 @@ def edit_node(request):
         node["dockerfile_content"] = updated_dockerfile_content
         # do not make this change in GitHub repository.
         # re-build this image and recursively re-build children without changing the tag.
-        if node["repo_name"]:
-            parameter = {"repo_name": node["repo_name"], "component_name": node["component_name"],
-                         "tag": node["tag"], "dockerfile": node["dockerfile_content"],
-                         "dockerfile_path": node["dockerfile_repo_path"]}
-            status = build_image(parameter)
-        else:
-            parameter = {"dockerfile": node["dockerfile_content"], "img_name": node["img_name"],
-                         "tag": node["tag"], "requirements": node}
-            status = build_image(parameter)
-        redeploy_components(node)                       # re-deploying the deployments
-        for ids in node["children"]:
-            dfs_same_node(ids, False)
+        parameter = get_parameters(node)
+        status = build_image(parameter)
         if status == "Success":
+            redeploy_components(node)                       # re-deploying the deployments
+            for ids in node["children"]:
+                dfs_same_node(ids, False)
+            records.replace_one({"_id": node_id}, node)
             messages.success(request, "Edited Successfully")
         else:
             messages.success(request, "Failed")
-        records.replace_one({"_id": node_id}, node)
         return redirect('/')
     else:
         node_id = int(request.GET.get('node_id'))
@@ -219,6 +219,9 @@ def delete_node(request):
         status = delete_subtree(node_id)
         latest_sibling_node = records.find_one({"img_name": node["img_name"]}, sort=[("tag", -1)], limit=1)         # re-deploying using the latest sibling node.
         if (latest_sibling_node is not None) and (status == "Success"):
+            ''' copying the deployments that were made using older image into latest sibling's deployments.
+                Then re-deploying those deployments using the latest sibling
+                After re-deploying, appending the deployments that were actually made by the latest sibling node prior to deletion of the node.'''
             latest_sibling_deployments = latest_sibling_node["deployments"]
             latest_sibling_node["deployments"] = list_of_deployments
             redeploy_components(latest_sibling_node)
@@ -256,24 +259,20 @@ def make_new_component_node(repository, repo_name, img_name, tag, parent, compon
     commits = repository.get_commits(sha=repository.default_branch)[0]
     new_node.commit_id = commits.sha                                        # storing the commit sha of the node.
     new_node.dockerfile_repo_path = dockerfile_repo_path
-    new_node.dockerfile_content = get_data_from_repository(repository,
-                                                           new_node.dockerfile_repo_path)  # storing the contents of dockerfile
-    parent, requirements_path = parse_dockerfile(new_node.dockerfile_content)
-    if requirements_path:
-        dependency = dependencies('requirements.txt')
-        dependency.deps_repo_path = requirements_path[1:]
-        dependency.dependency_content = get_data_from_repository(repository, dependency.deps_repo_path)  # storing the contents of requirements.txt
-        new_node.files.append(dependency)
+    new_node.dockerfile_content = get_data_from_repository(repository, new_node.dockerfile_repo_path)  # storing the contents of dockerfile
+    parent, list_of_requirements = parse_dockerfile(new_node.dockerfile_content)
+    new_node.files = get_dependencies(repository, list_of_requirements)
     sibling_node = records.find_one({"img_name": img_name}, sort=[("tag", -1)], limit=1)    # image with the same name and latest tag.
-    new_node.sibling = sibling_node["_id"]                                                  # assigning sibling
-    element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)             # finding the highest id
-    new_node._id = element_with_highest_id["_id"] + 1                                       # assigning id
+    if sibling_node:
+        new_node.sibling = sibling_node["_id"]                    # assigning sibling
+    element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)   # finding the highest id
+    new_node._id = element_with_highest_id["_id"] + 1             # assigning id
     return new_node
 
 
-def make_new_image_node(img_name, tag, parent_id, dockerfile, requirements):
+def make_new_image_node(img_name, tag, parent_id, dockerfile, requirements):    # makes a new node for image without repository
     new_node = treenode(img_name + ':' + tag)
-    new_node.parent = parent_id
+    new_node.parent = int(parent_id)
     new_node.dockerfile_content = dockerfile
     if requirements:
         dependency = dependencies('requirements.txt')
@@ -285,3 +284,5 @@ def make_new_image_node(img_name, tag, parent_id, dockerfile, requirements):
     element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)  # finding the highest id
     new_node._id = element_with_highest_id["_id"] + 1
     return new_node
+
+

@@ -5,7 +5,6 @@ import json
 import time
 import logging
 import os
-import requests
 import pytz
 from dotenv import load_dotenv
 import pymongo
@@ -57,17 +56,21 @@ def parse_script(shell_script):
 
 def parse_dockerfile(dockerfile):
     parent = None
-    requirements_path = None
+    # requirements_path = None
+    list_of_requirements_path = []
     dockerfile = dockerfile.splitlines()
     for lines in dockerfile:
         if lines.startswith('FROM'):
             parent = lines.split()[1]
             if parent.find(':') == -1:
                 parent = parent + ':1.0'
-        match = re.match(r'COPY\s+([^\s]+/requirements.txt)\s+\.', lines)  # requirements.txt path
+        # match = re.match(r'COPY\s+([^\s]+/requirements.txt)\s+\.', lines)     # requirements.txt path
+        match = re.match(r'COPY\s+((\S+/)?.*requirements.*\.txt)\s+\.', lines)        # requirements.txt path
         if match:
             requirements_path = match.group(1)
-    return parent, requirements_path
+            list_of_requirements_path.append(requirements_path)
+    # return parent, requirements_path
+    return parent, list_of_requirements_path
 
 
 def convert_to_indian_time(utc_time_zone):
@@ -93,7 +96,7 @@ def build_image(parameter):
         response = requests.post("http://127.0.0.1:9000/poll", data=parameter)
         response = response.json()
         if response["status"] == "Success" or response["status"] == "Failed":
-            logging.info(f'''Status of image {img_name}: Rebuild {response["status"]}''')
+            logging.info(f'''Build Status of image: {img_name} --> Rebuild {response["status"]}''')
             return response["status"]
         time.sleep(5)
 
@@ -102,57 +105,70 @@ def delete_image(parameter):
     response = requests.post("http://127.0.0.1:9000/delete_node_api", data=parameter)
     response = response.json()
     if response["status"] == "Success":
-        logging.info(f'''Status of deletion image: {parameter["img_name"]} --> {response["status"]}''')
+        logging.info(f'''Status of deletion of image: {parameter["img_name"]} --> {response["status"]}''')
         return "Success"
     else:
-        logging.info(f'''Status of deletion image: {parameter["img_name"]} --> {response["status"]}''')
+        logging.info(f'''Status of deletion of image: {parameter["img_name"]} --> {response["status"]}''')
         return "Failed"
 
 
-def should_rebuild_image_and_sync(node, repo_name):
-    repo_url = f"Poojan230103/{repo_name}"
-    repository = github_client.get_repo(repo_url)
-    dockerfile_repo_path = node["dockerfile_repo_path"]  # check for dockerfile
+def should_rebuild_image_and_sync(node, repo_name):         # returns true if any of the dockerfile or requirements.txt is modified
+    repository = github_client.get_repo(f"{os.getenv('REPO_BASE')}/{repo_name}")
+    dockerfile_repo_path = node["dockerfile_repo_path"]                         # check for dockerfile
     dockerfile_commits = repository.get_commits(path=dockerfile_repo_path)
     dockerfile_last_commit_time = dockerfile_commits[0].commit.committer.date
+    dockerfile_last_commit_time = convert_to_indian_time(dockerfile_last_commit_time)
     last_sync_time = datetime.strptime(node["last_synced_time"], '%Y-%m-%d %H:%M:%S')
+    last_sync_time = convert_to_indian_time(last_sync_time)                                     # converting both times in INDIA timezone to avoid any confusion.
     if dockerfile_last_commit_time > last_sync_time:
         return True
-    for dependency in node["files"]:  # check for requirements.txt
-        # Use dependency_repo_path as name
-        deps_repo_path = dependency["deps_repo_path"]
-        dependency_file_commits = repository.get_commits(path=deps_repo_path)
+    for dependency in node["files"]:                                            # check for requirements.txt
+        dependency_repo_path = dependency["dependency_repo_path"]
+        dependency_file_commits = repository.get_commits(path=dependency_repo_path)
         dependency_last_commit_time = dependency_file_commits[0].commit.committer.date
-        print("requirements.txt", dependency_last_commit_time, last_sync_time)
+        dependency_last_commit_time = convert_to_indian_time(dependency_last_commit_time)
         if dependency_last_commit_time > last_sync_time:
             return True
     return False
 
 
+def get_parameters(node):
+    if node["repo_name"]:
+        parameter = {
+            "repo_name": node["repo_name"],
+            "dockerfile": node["dockerfile_content"], "dockerfile_path": node["dockerfile_repo_path"],
+            "component_name": node["component_name"], "tag": node["tag"]
+        }
+    else:
+        requirements = None
+        for dependency in node["files"]:                        # in case the image does not contain any repo, then the list node["files"] will contain atmost 1 element.
+            requirements = dependency["dependency_content"]
+        parameter = {
+            "dockerfile": node["dockerfile_content"], "img_name": node["img_name"],
+            "tag": node["tag"], "requirements": requirements
+        }
+    return parameter
+
+
 def sync_new_node(node, repo_name):
-    repo_url = f"Poojan230103/{repo_name}"
+    repo_url = f"{os.getenv('REPO_BASE')}/{repo_name}"
     repository = github_client.get_repo(repo_url)
     if should_rebuild_image_and_sync(node, repo_name):                                # the files have changed, so we need to rebuild.
         new_node = copy.deepcopy(node)
         new_node["dockerfile_content"] = get_data_from_repository(repository, new_node["dockerfile_repo_path"])
-        parent_node_from_repository = check_if_new_parent_exists(new_node["dockerfile_content"])
+        parent_name_from_repository, list_of_requirements = parse_dockerfile(new_node["dockerfile_content"])
+        parent_node_from_repository = records.find_one({"img_name": parent_name_from_repository.split(':')[0], "tag": float(parent_name_from_repository.split(':')[1])})
         if parent_node_from_repository is None:
             return 1
-        new_node["files"].clear()
-        for dependency in node["files"]:
-            dependency["dependency_content"] = get_data_from_repository(repository, dependency["deps_repo_path"])               # updating the contents of dependencies
-            new_node["files"].append(dependency)
-        new_node["created_time"] = new_node["last_synced_time"] = new_node["last_updated_time"] = str(datetime.now().replace(microsecond=0))
+        new_node["files"] = get_dependencies(repository, list_of_requirements)
+        new_node["created_time"] = new_node["last_synced_time"] = new_node["last_updated_time"] = str(datetime.utcnow().replace(microsecond=0))
         element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)             # finding the highest id
         new_node["_id"] = element_with_highest_id["_id"] + 1
         global next_id
         next_id = new_node["_id"] + 1
         old_to_mirror[node["_id"]] = new_node["_id"]
         new_node["tag"] = round(node["tag"] + 0.1, 10)          # updating the tag of the image
-        parameter = {                                           # building new docker image
-            "repo_name": new_node["repo_name"],
-            "dockerfile": new_node["dockerfile_content"], "dockerfile_path": new_node["dockerfile_repo_path"],
-            "component_name": new_node["component_name"], "tag": new_node["tag"]}
+        parameter = get_parameters(new_node)
         status = build_image(parameter)
         if status == "Success":
             redeploy_components(new_node)                               # redeploying the deployments
@@ -169,18 +185,19 @@ def sync_new_node(node, repo_name):
             records.replace_one({"_id": parent_node["_id"]}, parent_node)
         else:
             return 1
-        node["last_synced_time"] = str(datetime.now().replace(microsecond=0))
+        node["last_synced_time"] = str(datetime.utcnow().replace(microsecond=0))
         records.replace_one({"_id": node["_id"]}, node)
     return 0
 
 
 def sync_same_node(node, repo_name):
-    repo_url = f"Poojan230103/{repo_name}"
-    repository = github_client.get_repo(repo_url)
+    repository = github_client.get_repo(f"{os.getenv('REPO_BASE')}/{repo_name}")
     if should_rebuild_image_and_sync(node, repo_name):
         node["dockerfile_content"] = get_data_from_repository(repository, node["dockerfile_repo_path"])
-        parent_node_from_repository = check_if_new_parent_exists(node["dockerfile_content"])
-        if parent_node_from_repository is None:
+        parent_name_from_repository, list_of_requirements = parse_dockerfile(node["dockerfile_content"])
+        parent_node_from_repository = records.find_one({"img_name": parent_name_from_repository.split(':')[0], "tag": float(parent_name_from_repository.split(':')[1])})
+        # parent_node_from_repository = check_if_new_parent_exists(node["dockerfile_content"])
+        if parent_node_from_repository is None:                        # if the parent node does not exist
             return 1
         if parent_node_from_repository["_id"] != node["parent"]:           # if the parent has changed in the new version of the dockerfile and the new parent exists
             old_parent_node = records.find_one({"_id": node["parent"]})
@@ -188,13 +205,8 @@ def sync_same_node(node, repo_name):
             parent_node_from_repository["children"].append(node["_id"])
             records.replace_one({"_id": old_parent_node["_id"]}, old_parent_node)
             records.replace_one({"_id": parent_node_from_repository["_id"]}, parent_node_from_repository)
-        updated_dependency = []
-        for dependency in node["files"]:
-            dependency["dependency_content"] = get_data_from_repository(repository, dependency["deps_repo_path"])
-            updated_dependency.append(dependency)
-        node["files"].clear()
-        node["files"] = updated_dependency
-        parameter = {"repo_name": node["repo_name"], "dockerfile": node["dockerfile_content"], "dockerfile_path": node["dockerfile_repo_path"], "component_name": node["component_name"], "tag": node["tag"]}
+        node["files"] = get_dependencies(repository, list_of_requirements)
+        parameter = get_parameters(node)
         status = build_image(parameter)
         if status == "Success":
             redeploy_components(node)                                               # redeploying the deployments
@@ -202,57 +214,65 @@ def sync_same_node(node, repo_name):
             node["commit_id"] = commits.sha                                         # updating the commit sha of the node.
             for ids in node["children"]:
                 dfs_same_node(ids)
-            node["last_updated_time"] = str(datetime.now().replace(microsecond=0))
+            node["last_updated_time"] = str(datetime.utcnow().replace(microsecond=0))
         else:
             return 1
-    node["last_synced_time"] = str(datetime.now().replace(microsecond=0))
+    node["last_synced_time"] = str(datetime.utcnow().replace(microsecond=0))
     records.replace_one({"_id": node["_id"]}, node)
     return 0
 
 
-def add_new_component(repo_name, components):
-    for component in components.keys():
+def add_new_component(repo_name, components_dictionary):          # components_dictionary --> dictionary which maps component_name to dockerfile_repo_path
+    for component in components_dictionary.keys():
         if records.count_documents({"component_name": component}) == 0:
-            repository = github_client.get_repo(f"Poojan230103/{repo_name}")
+            repository = github_client.get_repo(f"{os.getenv('REPO_BASE')}/{repo_name}")
             name = 'poojan23/docker-bakery-system_' + component + ':1.0'
             new_node = treenode(name)
             element_with_highest_id = records.find_one({}, sort=[("_id", -1)], limit=1)             # finding the highest id
             new_node._id = element_with_highest_id["_id"] + 1
-            new_node.repo_name = repo_name  # name of repository
-            new_node.dockerfile_repo_path = components[component][1:]                                     # this path is relative to the root path of repo.
+            new_node.repo_name = repo_name
+            new_node.dockerfile_repo_path = components_dictionary[component][1:]                              # this path is relative to the root path of repo.
             new_node.component_name = component
             new_node.dockerfile_content = get_data_from_repository(repository, new_node.dockerfile_repo_path)
-            parent, requirements_path = parse_dockerfile(new_node.dockerfile_content)
-            parent_data = parent.split(':')                                                                 # parent_data --> list with 0th element image-name and 1st element tag
+            parent_name, list_of_requirements = parse_dockerfile(new_node.dockerfile_content)
+            parent_data = parent_name.split(':')                                                                # parent_data-->list with 0th element image-name and 1st element tag
             parent_node = records.find_one({"img_name": parent_data[0], "tag": float(parent_data[1])})
             if parent_node is None:
                 continue
             new_node.parent = parent_node["_id"]        # storing the parent
-            if requirements_path:                       # this path is relative to the .sh file
-                new_dependency = dependencies("requirements.txt")
-                new_dependency.deps_repo_path = requirements_path[1:]                                                       # requirements.txt path relative to path of the build-component.sh
-                new_dependency.dependency_content = get_data_from_repository(repository, new_dependency.deps_repo_path)     # storing the contents of requirements.txt
-                new_node.files.append(new_dependency)
+            new_node.files = get_dependencies(repository, list_of_requirements)
             parent_node["children"].append(new_node._id)                            # storing the child
             commits = repository.get_commits(sha=repository.default_branch)[0]
             new_node.commit_id = commits.sha                                        # storing the commit sha of the commit.
-            parameter = {
-                "repo_name": new_node.repo_name,
-                "dockerfile": new_node.dockerfile_content, "dockerfile_path": new_node.dockerfile_repo_path,
-                "component_name": new_node.component_name, "tag": new_node.tag}
+            parameter = get_parameters_from_treenode(new_node)
             status = build_image(parameter)
             if status == "Success":
                 store_in_mongodb(new_node)
                 records.replace_one({"_id": parent_node["_id"]}, parent_node)
 
 
+'''
+Explanation for dfs_new_node function
+
+       a            after upgrading node b                a                 
+       b         --------------------------->        b        e            
+     c   d                                         c   d    f   g          
+when we upgrade node b, sibling node(node -> e) will be created and similarly its subtree will be created recursively.
+I am just making a copy of subtree rooted at b by mapping the nodes of subtree of b with the nodes of subtree of its sibling(e).
+So the new subtree is build in the following order, b is mapped to e ->  c is mapped to f -> d is mapped to g. Basically it's just DFS.
+I am also maintaining a dictionary(old_to_mirror) to establish the siblings relationship between mapped nodes. 
+'''
+
+
 def dfs_new_node(old_child_id, sibling_parent_node, new_parent_node):                 # building the whole tree structure.
     old_child_node = records.find_one({"_id": old_child_id})
     new_child_node = copy.deepcopy(old_child_node)                          # making the copy of the old node
     if new_child_node["repo_name"]:
-        repository = github_client.get_repo(f'''Poojan230103/{new_child_node["repo_name"]}''')
+        repository = github_client.get_repo(f'''{os.getenv('REPO_BASE')}/{new_child_node["repo_name"]}''')
         dockerfile_content = get_data_from_repository(repository, new_child_node["dockerfile_repo_path"])           # taking data from GitHub repository
-        parent_node_from_repository = check_if_new_parent_exists(dockerfile_content)                                # checking whether the parent exists or not.
+        parent_name_from_repository, list_of_requirements = parse_dockerfile(dockerfile_content)
+        parent_node_from_repository = records.find_one({"img_name": parent_name_from_repository.split(':')[0], "tag": float(parent_name_from_repository.split(':')[1])})
+        new_child_node["files"] = get_dependencies(repository, list_of_requirements)
         if parent_node_from_repository is None:
             return
         if parent_node_from_repository["_id"] != sibling_parent_node["_id"]:
@@ -264,8 +284,8 @@ def dfs_new_node(old_child_id, sibling_parent_node, new_parent_node):           
     old_to_mirror[old_child_id] = new_child_node["_id"]
     new_child_node["dockerfile_content"] = update_parent_in_dockerfile(new_child_node, new_parent_node)             # updating the dockerfile
     if new_child_node["repo_name"]:
-        repository = github_client.get_repo(f'''Poojan230103/{new_child_node["repo_name"]}''')
-        file = repository.get_contents(new_child_node["dockerfile_repo_path"])                 # updating the dockerfile in Github repo
+        repository = github_client.get_repo(f'''{os.getenv('REPO_BASE')}/{new_child_node["repo_name"]}''')
+        file = repository.get_contents(new_child_node["dockerfile_repo_path"])                 # updating the dockerfile in GitHub repo
         repository.update_file(file.path, "updated Dockerfile", new_child_node["dockerfile_content"], file.sha)
         time.sleep(5)
         commits = repository.get_commits(sha=repository.default_branch)[0]
@@ -274,21 +294,14 @@ def dfs_new_node(old_child_id, sibling_parent_node, new_parent_node):           
     new_parent_node["children"].append(new_child_node["_id"])                       # appending child to the new parent node
     highest_tag_node = records.find_one({"img_name": new_child_node["img_name"]}, sort=[("tag", -1)], limit=1)
     highest_tag = highest_tag_node["tag"]
-    new_child_node["tag"] = round(highest_tag + 0.1, 10)
+    new_child_node["tag"] = round(highest_tag + 0.1, 10)            # incrementing the minor tag
     new_child_node["children"].clear()
     # building image
-    if new_child_node["repo_name"]:
-        parameter = {"repo_name": new_child_node["repo_name"], "dockerfile": new_child_node["dockerfile_content"], "dockerfile_path": new_child_node["dockerfile_repo_path"], "component_name": new_child_node["component_name"], "tag": new_child_node["tag"]}
-    else:
-        requirements = None
-        for dep in new_child_node["files"]:
-            if dep["name"] == "requirements.txt":
-                requirements = dep["dependency_content"]
-        parameter = {"dockerfile": new_child_node["dockerfile_content"], "img_name": new_child_node["img_name"], "tag": new_child_node["tag"], "requirements": requirements}
+    parameter = get_parameters(new_child_node)
     status = build_image(parameter)
     if status == "Success":
-        redeploy_components(new_child_node)                 # redeploying the componentes
-        new_child_node["created_time"] = new_child_node["last_synced_time"] = new_child_node["last_updated_time"] = str(datetime.now().replace(microsecond=0))
+        redeploy_components(new_child_node)                 # redeploying the components
+        new_child_node["created_time"] = new_child_node["last_synced_time"] = new_child_node["last_updated_time"] = str(datetime.utcnow().replace(microsecond=0))
         for child in old_child_node["children"]:
             dfs_new_node(child, old_child_node, new_child_node)
         first_mirror_img = True
@@ -300,34 +313,23 @@ def dfs_new_node(old_child_id, sibling_parent_node, new_parent_node):           
         records.insert_one(new_child_node)
 
 
-def dfs_same_node(node_id, to_update_time=True):             # recursively re-building the subtree on update of the parent node
-    # variable to_update_time is kept because we will use this function for edit node functionality too.
+def dfs_same_node(node_id, to_update_last_sync_time=True):             # recursively re-building the subtree on update of the parent node
+    # variable to_update_last_sync_time is kept because we will use this function for edit node functionality too.
     child_node = records.find_one({"_id": node_id})
-    if child_node["component_name"]:
-        parameter = {"repo_name": child_node["repo_name"], "component_name": child_node["component_name"], "tag": child_node["tag"], "dockerfile": child_node["dockerfile_content"], "dockerfile_path": child_node["dockerfile_repo_path"]}
-        status = build_image(parameter)
-        if status == "Success":
-            redeploy_components(child_node)  # redeploying the deployments
-            for ids_child in child_node["children"]:
-                dfs_same_node(ids_child)
-    else:
-        requirements_content = None
-        for dep in child_node["files"]:
-            if dep["name"] == "requirements.txt":
-                requirements_content = dep["dependency_content"]
-        parameter = {"dockerfile": child_node["dockerfile_content"], "img_name": child_node["img_name"], "tag": child_node["tag"], "requirements": requirements_content}
-        status = build_image(parameter)
-        if status == "Success":                             # checking whether the image is synced successfully or not
-            redeploy_components(child_node)                 # redeploying the deployments
-            for ids_child in child_node["children"]:
-                dfs_same_node(ids_child)
-        if to_update_time:
-            child_node["last_updated_time"] = child_node["last_synced_time"] = str(datetime.now().replace(microsecond=0))
+    parameter = get_parameters(child_node)
+    status = build_image(parameter)
+    if status == "Success":
+        redeploy_components(child_node)                 # redeploying the deployments
+        for child_id in child_node["children"]:
+            dfs_same_node(child_id)
+        child_node["last_updated_time"] = str(datetime.utcnow().replace(microsecond=0))
+        if to_update_last_sync_time:
+            child_node["last_synced_time"] = str(datetime.utcnow().replace(microsecond=0))
             records.replace_one({"_id": child_node["_id"]}, child_node)
 
 
 def autosync_new_node(repo_name):
-    repository = github_client.get_repo(f"Poojan230103/{repo_name}")
+    repository = github_client.get_repo(f"{os.getenv('REPO_BASE')}/{repo_name}")
     shell_script = get_data_from_repository(repository, '/build-component.sh')
     components = parse_script(shell_script)
     add_new_component(repo_name, components)        # checking and building new components are added
@@ -337,22 +339,22 @@ def autosync_new_node(repo_name):
 
 
 def autosync_same_node(repo_name):
-    repository = github_client.get_repo(f"Poojan230103/{repo_name}")
+    repository = github_client.get_repo(f"{os.getenv('REPO_BASE')}/{repo_name}")
     shell_script = get_data_from_repository(repository, '/build-component.sh')
     components = parse_script(shell_script)
     add_new_component(repo_name, components)        # checking and building if new components are added
     for comp in components.keys():
         node = records.find_one({"repo_name": repo_name, "component_name": comp}, sort=[("tag", -1)], limit=1)      # finding the node with highest tag.
-        sync_same_node(node, repo_name)
+        sync_same_node(node, repo_name)             # syncing each component in the repository
 
 
 def delete_subtree(node_id):                                # this function deletes a node and its subtree.
     node = records.find_one({"_id": node_id})
-    for child_id in node["children"]:
+    for child_id in node["children"]:                           # recursively deleting the children
         delete_subtree(child_id)
     parameters = {"img_name": node["img_name"], "tag": node["tag"]}
     status = delete_image(parameters)
-    if status == "Success":
+    if status == "Success":                                                 # the node is deleted from the database only if the has been successfully deleted
         next_sibling_node = records.find_one({"sibling": node["_id"]})
         if next_sibling_node is not None:
             next_sibling_node["sibling"] = node["sibling"]
@@ -366,7 +368,7 @@ def delete_subtree(node_id):                                # this function dele
 
 def get_k8s_deployments():                      # function to get the deployments using each image under the environment-prod
     parameters = {"env": "prod"}
-    response = requests.post("http://127.0.0.1:9000/get_deployments", data=parameters)
+    response = requests.post("http://127.0.0.1:9000/get_deployments", data=parameters)     # calls an API which returns a dictionary {'img_name': {'deployment_name', 'env'}
     dict_string = response.content.decode('utf-8')
     dictionary = eval(dict_string)
     for image in dictionary.keys():
@@ -377,40 +379,40 @@ def get_k8s_deployments():                      # function to get the deployment
         records.replace_one({"img_name": img_name, "tag": tag}, node)
 
 
-def redeploy_components(node):                          # this function re-deploy all the deployments that were made using this image.
+def redeploy_components(node):                          # this function re-deploy all the deployments that were made using this node(image).
     for deployment in node["deployments"]:
         parameters = {"image_name": node["img_name"], "tag": node["tag"], "component_name": node["component_name"], "deployment_name": deployment["deployment_name"]}
         requests.post("http://127.0.0.1:9000/deploy_component", data=parameters)
 
 
-def store_in_mongodb(node):                                                             # to be used to store the tree-node object in mongodb.
+def store_in_mongodb(node):                               # to be used to store the tree-node object in mongodb.
     json_data = json.dumps(node, default=lambda o: o.__dict__, indent=4)  # converting tree object to json
     json_data = json.loads(json_data)  # converting json to python dictionary
     records.insert_one(json_data)
 
 
-def get_data_from_repository(repository, file_path):
+def get_data_from_repository(repository, file_path):        # fetches the data from github repository from the provided file_path
     file = repository.get_contents(file_path)  # storing the contents of Dockerfile
     response = requests.get(file.download_url)
     content = str(response.content, 'UTF-8')
     return content
 
 
-def check_if_new_parent_exists(dockerfile_content):
+def check_if_new_parent_exists(dockerfile_content):      # this function checks whether the parent image specified in the dockerfile exists in our hierarchy or not.
     parent = None
     dockerfile_content = dockerfile_content.splitlines()
-    for line in dockerfile_content:
+    for line in dockerfile_content:                         # Takes into account the multi-stage docker build
         if line.__contains__("FROM"):
             parent = line.split()[1]
     parent_node_from_repository = records.find_one({"img_name": parent.split(':')[0], "tag": float(parent.split(':')[1])})
     return parent_node_from_repository
 
 
-def update_parent_in_dockerfile(new_child_node, new_parent_node):           # changes the parent image in the dockerfile and returns the updated dockerfile
+def update_parent_in_dockerfile(new_child_node, new_parent_node):           # modifies the parent image in the dockerfile and returns the updated dockerfile
     content = new_child_node["dockerfile_content"].splitlines()
     line_num = -1
     cnt = 0
-    for line in content:                    # also taking into account multi-stage docker build
+    for line in content:                        # taking into account multi-stage docker build by picking the last FROM statement
         if line.__contains__("FROM"):
             line_num = cnt
         cnt += 1
@@ -419,3 +421,32 @@ def update_parent_in_dockerfile(new_child_node, new_parent_node):           # ch
         new_par_name = new_parent_node["img_name"] + ':' + str(new_parent_node["tag"])
         content[line_num] = content[line_num].replace(old_par_name, new_par_name)
     return '\n'.join(content)
+
+
+def get_parameters_from_treenode(tree_node):
+    if tree_node.repo_name:
+        parameter = {"repo_name": tree_node.repo_name, "dockerfile": tree_node.dockerfile_content,
+                     "dockerfile_path": tree_node.dockerfile_repo_path, "component_name": tree_node.component_name,
+                     "tag": tree_node.tag}
+    else:                                           # if tree_node does not contain repository then it will have at-most 1 Requirements.txt
+        requirements = None
+        for dependency in tree_node.files:
+            if dependency["name"] == "requirements.txt":
+                requirements = dependency["dependency_content"]
+        parameter = {"dockerfile": tree_node.dockerfile_content,
+                     "img_name": tree_node.img_name,
+                     "tag": tree_node.tag,
+                     "requirements": requirements}
+    return parameter
+
+
+def get_dependencies(repository, list_of_requirements_path):
+    list_of_dependency = []
+    for requirements_path in list_of_requirements_path:
+        new_dependency = dependencies("requirements.txt")                       # naming all requirements.txt the same.
+        new_dependency.dependency_repo_path = requirements_path[1:]             # requirements.txt path relative to path of the build-component.sh
+        new_dependency.dependency_content = get_data_from_repository(repository, new_dependency.dependency_repo_path)  # storing the contents of requirements.txt
+        list_of_dependency.append(new_dependency)
+    dependencies_str = json.dumps([dependency.__dict__ for dependency in list_of_dependency])       # json string
+    list_of_dependency = json.loads(dependencies_str)                                               # list of dictionaries
+    return list_of_dependency

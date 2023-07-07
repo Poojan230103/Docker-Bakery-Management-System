@@ -1,165 +1,221 @@
 body {
-  margin-bottom: 6em;
+    margin-bottom: 6em;
 }
 
 .treeview .btn-default {
-  border-color: #e3e5ef;
+    border-color: #e3e5ef;
 }
+
 .treeview .btn-default:hover {
-  background-color: #f7faea;
-  color: #bada55;
+    background-color: #f7faea;
+    color: #bada55;
 }
+
 .treeview ul {
-  list-style: none;
-  padding-left: 32px;
+    list-style: none;
+    padding-left: 32px;
 }
+
 .treeview ul li {
-  padding: 50px 0px 0px 35px;
-  position: relative;
+    padding: 50px 0px 0px 35px;
+    position: relative;
 }
+
 .treeview ul li:before {
-  content: "";
-  position: absolute;
-  top: -26px;
-  left: -31px;
-  border-left: 2px dashed #a2a5b5;
-  width: 1px;
-  height: 100%;
+    content: "";
+    position: absolute;
+    top: -26px;
+    left: -31px;
+    border-left: 2px dashed #a2a5b5;
+    width: 1px;
+    height: 100%;
 }
+
 .treeview ul li:after {
-  content: "";
-  position: absolute;
-  border-top: 2px dashed #a2a5b5;
-  top: 70px;
-  left: -30px;
-  width: 65px;
+    content: "";
+    position: absolute;
+    border-top: 2px dashed #a2a5b5;
+    top: 70px;
+    left: -30px;
+    width: 65px;
 }
+
 .treeview ul li:last-child:before {
-  top: -22px;
-  height: 90px;
+    top: -22px;
+    height: 90px;
 }
+
 .treeview > ul > li:after, .treeview > ul > li:last-child:before {
-  content: unset;
+    content: unset;
 }
+
 .treeview > ul > li:before {
-  top: 90px;
-  left: 36px;
+    top: 90px;
+    left: 36px;
 }
+
 .treeview > ul > li:not(:last-child) > ul > li:before {
-  content: unset;
+    content: unset;
 }
+
 .treeview > ul > li > .treeview__level:before {
-  height: 60px;
-  width: 60px;
-  top: -9.5px;
-  background-color: #54a6d9;
-  border: 7.5px solid #d5e9f6;
-  font-size: 22px;
+    height: 60px;
+    width: 60px;
+    top: -9.5px;
+    background-color: #54a6d9;
+    border: 7.5px solid #d5e9f6;
+    font-size: 22px;
 }
+
 .treeview > ul > li > ul {
-  padding-left: 34px;
+    padding-left: 34px;
 }
+
 .treeview__level {
-  padding: 7px;
-  padding-left: 42.5px;
-  display: inline-block;
-  border-radius: 5px;
-  font-weight: 700;
-  border: 1px solid #e3e5ef;
-  position: relative;
-  z-index: 1;
+    padding: 7px;
+    padding-left: 42.5px;
+    display: inline-block;
+    border-radius: 5px;
+    font-weight: 700;
+    border: 1px solid #e3e5ef;
+    position: relative;
+    z-index: 1;
 }
+
 .treeview__level:before {
-  content: attr(data-level);
-  position: absolute;
-  left: -27.5px;
-  top: -6.5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 55px;
-  width: 55px;
-  border-radius: 50%;
-  border: 7.5px solid #eef6d5;
-  background-color: #bada55;
-  color: #fff;
-  font-size: 20px;
+    content: attr(data-level);
+    position: absolute;
+    left: -27.5px;
+    top: -6.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 55px;
+    width: 55px;
+    border-radius: 50%;
+    border: 7.5px solid #eef6d5;
+    background-color: #bada55;
+    color: #fff;
+    font-size: 20px;
 }
+
 .treeview__level-btns {
-  margin-left: 15px;
-  display: inline-block;
-  position: relative;
+    margin-left: 15px;
+    display: inline-block;
+    position: relative;
 }
+
 .treeview__level .update-node, .treeview__level .add-child, .treeview__level .upgrade-node, .treeview__level .edit-node, .treeview__level .delete-node, .treeview__level .delete-siblings {
-  position: absolute;
-  display: none;
-  transition: opacity 250ms cubic-bezier(0.7, 0, 0.3, 1);
+    position: absolute;
+    display: none;
+    transition: opacity 250ms cubic-bezier(0.7, 0, 0.3, 1);
 }
-.treeview__level .update-node.in, .treeview__level .add-child.in, .treeview__level .upgrade-node.in, .treeview__level .edit-node.in, .treeview__level .delete-node.in, .treeview__level .delete-siblings.in  {
-  display: block;
+
+.treeview__level .update-node.in, .treeview__level .add-child.in, .treeview__level .upgrade-node.in, .treeview__level .edit-node.in, .treeview__level .delete-node.in, .treeview__level .delete-siblings.in {
+    display: block;
 }
+
 .treeview__level .update-node.in .btn-default, .treeview__level .add-child.in .btn-default, .treeview__level .upgrade-node.in .btn-default, .treeview__level .edit-node.in .btn-default, .treeview__level .delete-node.in .btn-default, .treeview__level .delete-siblings.in .btn-default {
-  background-color: #faeaea;
-  color: #da5555;
+    background-color: #faeaea;
+    color: #da5555;
 }
+
 .treeview__level .update-node {
-  top: -50px;
-  left: 45px;
+    top: -50px;
+    left: 45px;
 }
+
 .treeview__level .add-child {
     top: -30px;
-  left: 45px;
+    left: 45px;
 }
-.treeview__level .upgrade-node{
+
+.treeview__level .upgrade-node {
     top: -10px;
     left: 45px;
 }
-.treeview__level .edit-node{
+
+.treeview__level .edit-node {
     top: 10px;
     left: 45px;
 }
 
-.treeview__level .delete-node{
+.treeview__level .delete-node {
     top: 30px;
     left: 45px;
 }
 
-.treeview__level .delete-siblings{
+.treeview__level .delete-siblings {
     top: 50px;
     left: 45px;
 }
 
 
 .treeview__level .level-remove {
-  display: none;
+    display: none;
 }
+
 .treeview__level.selected {
-  background-color: #f9f9fb;
-  box-shadow: 0px 3px 15px 0px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9fb;
+    box-shadow: 0px 3px 15px 0px rgba(0, 0, 0, 0.1);
 }
+
 .treeview__level.selected .level-remove {
-  display: inline-block;
+    display: inline-block;
 }
+
 .treeview__level.selected .level-add {
-  display: none;
+    display: none;
 }
-.treeview__level.selected .update-node, .treeview__level.selected .add-child, .treeview__level.selected .upgrade-node, .treeview__level.selected .edit-node, .treeview__level.selected .delete-node, .treeview__level.selected .delete-siblings  {
-  display: none;
+
+.treeview__level.selected .update-node, .treeview__level.selected .add-child, .treeview__level.selected .upgrade-node, .treeview__level.selected .edit-node, .treeview__level.selected .delete-node, .treeview__level.selected .delete-siblings {
+    display: none;
 }
+
 .treeview .level-title {
-  cursor: pointer;
-  user-select: none;
+    cursor: pointer;
+    user-select: none;
 }
+
 .treeview .level-title:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
+
 .treeview--mapview ul {
-  justify-content: center;
-  display: flex;
+    justify-content: center;
+    display: flex;
 }
+
 .treeview--mapview ul li:before {
-  content: unset;
+    content: unset;
 }
+
 .treeview--mapview ul li:after {
-  content: unset;
+    content: unset;
+}
+
+#suggestions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    display: none;
+}
+
+#suggestions li {
+    padding: 5px;
+    cursor: pointer;
+}
+
+#suggestions li:hover {
+    background-color: #f4f4f4;
+}
+
+#autocomplete-container {
+    max-height: 50px; /* set the maximum height of the container to 100 pixels */
+    overflow-y: auto; /* enable vertical scrolling */
+}
+
+.ui-menu-item {
+    height: auto; /* reset the height of each item */
 }

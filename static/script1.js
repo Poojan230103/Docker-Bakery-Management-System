@@ -1,13 +1,22 @@
+function reloadOnce() {
+    if (!sessionStorage.getItem('reloaded')) {
+        sessionStorage.setItem('reloaded', 'true');
+        location.reload();
+    }
+}
+
+window.onload = reloadOnce;
+
 fetch('/static/data.json')
-.then(function(resp){
-    return resp.json();
-})
-.then(function(data){
-   parentFunction(data);
-    const uls = document.querySelectorAll('li ul');
-    for(ul of uls) ul.classList.add('hide');
-    //ul.classList.add('hide');
-});
+    .then(function (resp) {
+        return resp.json();
+    })
+    .then(function (data) {
+        parentFunction(data);
+        const uls = document.querySelectorAll('li ul');
+        for (ul of uls) ul.classList.add('hide');
+        //ul.classList.add('hide');
+    });
 
 
 function createNode(name, levelCode, node_id) {
@@ -99,15 +108,15 @@ function hideChildren(event) {
     console.log(div);
     let ul = div.nextElementSibling;
     console.log(ul);
-    if(ul.classList.contains('hide')) ul.classList.remove('hide');
+    if (ul.classList.contains('hide')) ul.classList.remove('hide');
     else ul.classList.add('hide');
 }
 
-function parentFunction(json_data){
+function parentFunction(json_data) {
     const treeview = document.getElementsByClassName('treeview js-treeview')[0];
     const ul = treeview.firstElementChild;
-    if(json_data.length > 1) {
-        for(rootnode of json_data) {
+    if (json_data.length > 1) {
+        for (rootnode of json_data) {
             ul.appendChild(createGeneration(rootnode, '1'));
         }
     } else {
@@ -117,21 +126,19 @@ function parentFunction(json_data){
 }
 
 function createGeneration(json_data, level) {
-    const name = json_data.img_name + ':' + json_data.tag + ' ' + `(${json_data.sibling==null? '' : json_data.sibling})`;
+    const name = json_data.img_name + ':' + json_data.tag + ' ' + `(${json_data.sibling == null ? '' : json_data.sibling})`;
     const node = createNode(name, level, json_data._id);
     const li = document.createElement('li');
     li.appendChild(node);
     const ul = document.createElement('ul');
-    if(json_data.children.length != 0) {
-        for(child of json_data.children) {
+    if (json_data.children.length != 0) {
+        for (child of json_data.children) {
             ul.appendChild(createGeneration(child, `${+level + 1}`));
         }
     }
     li.appendChild(ul);
     return li;
 }
-
-
 
 
 /*

@@ -5,68 +5,76 @@
 
 <head>
 
-  <meta charset='UTF-8'>
-  <title>Visualizer</title>
+    <meta charset='UTF-8'>
+    <title>Visualizer</title>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
-<link rel="stylesheet" href="/static/index.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
-<nav class="navbar navbar-light bg-light justify-content-between">
-  <form class="form-inline mx-auto" method="post" action="/manual_sync_on_image">
-      {% csrf_token %}
-      <input type="hidden" name="sync_type" value="sync_by_img_name">
-    <input class="form-control mr-sm-4" type="text" placeholder="Image Name" name="img_name">
-      <div class="form-check mr-sm-3">
-      <input class="form-check-input" type="radio" name="sync_type" value=0>
-      <label class="form-check-label">
-        Upgrade Image
-      </label>
-     </div>
-     <div class="form-check mr-sm-3">
-      <input class="form-check-input" type="radio" name="sync_type" value=1 checked>
-      <label class="form-check-label">
-        Update Image
-      </label>
-    </div>
+<nav class="navbar navbar-light bg-primary justify-content-between">
+    <h1 style="font-size: 16px">Docker Bakery Management System</h1>
+    <form class="form-inline mx-auto" method="post" action="/manual_sync_on_image">
+        {% csrf_token %}
+        <input type="hidden" name="sync_type" value="sync_by_img_name">
+        <input class="form-control mr-sm-4" type="text" placeholder="Image Name" name="img_name"
+               id="input-datalist" style="width: 200px; font-size: 12px" autocomplete="off">
 
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sync</button>
-  </form>
+        <div class="form-check mr-sm-3">
+            <input class="form-check-input" type="radio" name="sync_type" style="accent-color: cadetblue" value=0>
+            <label class="form-check-label" style="font-size: 12px">
+                Upgrade Image
+            </label>
+        </div>
+        <div class="form-check mr-sm-3">
+            <input class="form-check-input" type="radio" name="sync_type" style="accent-color: cadetblue" value=1
+                   checked>
+            <label class="form-check-label" style="font-size: 12px;">
+                Update Image
+            </label>
+        </div>
+
+        <button class="btn btn-success my-2 my-sm-0" type="submit" style="font-size: 12px">Sync</button>
+    </form>
 </nav>
+
+
 {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="font-size: 12px">{{ message }}</li>
+        {% endfor %}
+    </ul>
 {% endif %}
 
-  <div class="treeview js-treeview">
-  <ul>
+<div class="treeview js-treeview">
+    <ul>
 
-  </ul>
+    </ul>
 </div>
 </div>
 
 <template id="levelMarkup">
     <li>
-      <div class="treeview__level" data-level="A" onclick = 'hideChildren(event)'>
-        <span class="level-title">Level A</span>
-        <div class="treeview__level-btns">
-          <div class="btn btn-default btn-sm level-add"><span class="fa fa-ellipsis-v"></span></div>
-          <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
-          <div class="btn btn-default btn-sm update-node"><span>Add Same Level</span></div>
-          <div class="btn btn-default btn-sm add-child"><span>Add Sub Level</span></div>
-            <div class="btn btn-default btn-sm upgrade-node"><span>Upgrade Node</span></div>
-            <div class="btn btn-default btn-sm edit-node"><span>Edit Node</span></div>
+        <div class="treeview__level" data-level="A" onclick='hideChildren(event)'>
+            <span class="level-title">Level A</span>
+            <div class="treeview__level-btns">
+                <div class="btn btn-default btn-sm level-add"><span class="fa fa-ellipsis-v"></span></div>
+                <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                <div class="btn btn-default btn-sm update-node"><span>Add Same Level</span></div>
+                <div class="btn btn-default btn-sm add-child"><span>Add Sub Level</span></div>
+                <div class="btn btn-default btn-sm upgrade-node"><span>Upgrade Node</span></div>
+                <div class="btn btn-default btn-sm edit-node"><span>Edit Node</span></div>
+            </div>
         </div>
-      </div>
-      <ul>
-      </ul>
-</li>
+        <ul>
+        </ul>
+    </li>
 </template>
 
 {#<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>#}
@@ -74,15 +82,31 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 
 <script src="{% static 'script1.js' %}"></script>
-<script  src="{% static 'script.js' %}" crossorigin></script>
-<script>
-    function selectOption(option) {
-      const dropdownButton = $('#dropdownButton');
-      dropdownButton.text(option);
-    }
+<script src="{% static 'script.js' %}" crossorigin></script>
+<script type="text/javascript">
+    let suggestions = [
+        {% for option in dropdown_options %}
+            "{{ option }}",
+        {% endfor %}
+    ];
+
+    suggestions.sort()
+
+    console.log(suggestions)
+
+    $('#input-datalist').autocomplete({
+        source: function (request, response) {
+            let term = request.term.toLowerCase();
+            let filteredSuggestions = $.grep(suggestions, function (value) {
+                return value.toLowerCase().indexOf(term) >= 0;
+            });
+            response(filteredSuggestions);
+        }
+    });
 
 </script>
 </body>
