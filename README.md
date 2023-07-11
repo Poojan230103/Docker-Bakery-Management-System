@@ -13,3 +13,4 @@ This is a version control type of system where we can use the sibling nodes to c
 3) Manually sync a node to its latest version by upgrading or updating the node.
 4) Adding a new node with the help of UI.
 5) We can edit the dockerfile of any node and re-build it and its sub-tree using its updated dockerfile.
+6) Deleting any image along with its dependent children images.
