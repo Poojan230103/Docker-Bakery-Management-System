@@ -17,3 +17,4 @@ This is a version control type of system where we can use the sibling nodes to c
 7) Redeployment of deployments on kubernetes using Helm Chart
 
 <h3> Go to myapp/functions.py and myapp/views.py to see the backend implementation of the project.</h3>
+<h3> To see the implementation of the APIs, go to Docker-Bakery_APIs repository.</h3>
