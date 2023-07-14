@@ -15,3 +15,5 @@ This is a version control type of system where we can use the sibling nodes to c
 5) We can edit the dockerfile of any node and re-build it and its sub-tree using its updated dockerfile.
 6) Deleting any image along with its dependent children images.
 7) Redeployment of deployments on kubernetes using Helm Chart
+
+<h3> Go to myapp/functions.py and myapp/views.py to see the backend implementation of the project.</h3>
