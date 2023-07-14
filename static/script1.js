@@ -81,12 +81,6 @@ function createNode(name, levelCode, node_id) {
     delete_span.appendChild(document.createTextNode('Delete Node'));
     delete_node.appendChild(delete_span);
 
-    // delete siblings
-    const delete_siblings = document.createElement('div');
-    delete_siblings.classList.add('btn', 'btn-default', 'btn-sm', 'delete-siblings');
-    const delete_siblings_span = document.createElement('span');
-    delete_siblings_span.appendChild(document.createTextNode('Delete All Siblings'));
-    delete_siblings.appendChild(delete_siblings_span);
 
     treeview__level_btns.appendChild(level_add);
     treeview__level_btns.appendChild(level_remove);
@@ -95,7 +89,6 @@ function createNode(name, levelCode, node_id) {
     treeview__level_btns.appendChild(add_child);
     treeview__level_btns.appendChild(edit_node);
     treeview__level_btns.appendChild(delete_node);
-    treeview__level_btns.appendChild(delete_siblings);
 
     treeview__level.appendChild(level_title);
     treeview__level.appendChild(treeview__level_btns);
@@ -122,7 +115,6 @@ function parentFunction(json_data) {
     } else {
         ul.appendChild(createGeneration(json_data, '1'));
     }
-    //treeview.appendChild(details);
 }
 
 function createGeneration(json_data, level) {
@@ -139,53 +131,3 @@ function createGeneration(json_data, level) {
     li.appendChild(ul);
     return li;
 }
-
-
-/*
-
-A node
-<div class="treeview__level" data-level="A">
-    <span class="level-title">Level A</span>
-    <div class="treeview__level-btns">
-        <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus"></span></div>
-        <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
-        <div class="btn btn-default btn-sm update-node"><span>Add Same Level</span></div>
-        <div class="btn btn-default btn-sm add-child"><span>Add Sub Level</span></div>
-    </div>
-</div>
-
-Its child
-<ul>
-
-    Child 1
-    <li>
-        <div class="treeview__level" data-level="B">
-            <span class="level-title">Level A</span>
-            <div class="treeview__level-btns">
-                <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus"></span></div>
-                <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
-                <div class="btn btn-default btn-sm update-node"><span>Add Same Level</span></div>
-                <div class="btn btn-default btn-sm add-child"><span>Add Sub Level</span></div>
-            </div>
-        </div>
-    </li>
-
-    Child 2
-    <li>
-        <div class="treeview__level" data-level="B">
-            <span class="level-title">Level A</span>
-            <div class="treeview__level-btns">
-                <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus"></span></div>
-                <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
-                <div class="btn btn-default btn-sm update-node"><span>Add Same Level</span></div>
-                <div class="btn btn-default btn-sm add-child"><span>Add Sub Level</span></div>
-            </div>
-        </div>
-    </li>
-</ul>
-
-
-
-
-
-*/

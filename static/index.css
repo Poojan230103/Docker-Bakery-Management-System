@@ -105,17 +105,17 @@ body {
     position: relative;
 }
 
-.treeview__level .update-node, .treeview__level .add-child, .treeview__level .upgrade-node, .treeview__level .edit-node, .treeview__level .delete-node, .treeview__level .delete-siblings {
+.treeview__level .update-node, .treeview__level .add-child, .treeview__level .upgrade-node, .treeview__level .edit-node, .treeview__level .delete-node {
     position: absolute;
     display: none;
     transition: opacity 250ms cubic-bezier(0.7, 0, 0.3, 1);
 }
 
-.treeview__level .update-node.in, .treeview__level .add-child.in, .treeview__level .upgrade-node.in, .treeview__level .edit-node.in, .treeview__level .delete-node.in, .treeview__level .delete-siblings.in {
+.treeview__level .update-node.in, .treeview__level .add-child.in, .treeview__level .upgrade-node.in, .treeview__level .edit-node.in, .treeview__level .delete-node.in {
     display: block;
 }
 
-.treeview__level .update-node.in .btn-default, .treeview__level .add-child.in .btn-default, .treeview__level .upgrade-node.in .btn-default, .treeview__level .edit-node.in .btn-default, .treeview__level .delete-node.in .btn-default, .treeview__level .delete-siblings.in .btn-default {
+.treeview__level .update-node.in .btn-default, .treeview__level .add-child.in .btn-default, .treeview__level .upgrade-node.in .btn-default, .treeview__level .edit-node.in .btn-default, .treeview__level .delete-node.in .btn-default {
     background-color: #faeaea;
     color: #da5555;
 }
@@ -145,11 +145,6 @@ body {
     left: 45px;
 }
 
-.treeview__level .delete-siblings {
-    top: 50px;
-    left: 45px;
-}
-
 
 .treeview__level .level-remove {
     display: none;
@@ -168,7 +163,7 @@ body {
     display: none;
 }
 
-.treeview__level.selected .update-node, .treeview__level.selected .add-child, .treeview__level.selected .upgrade-node, .treeview__level.selected .edit-node, .treeview__level.selected .delete-node, .treeview__level.selected .delete-siblings {
+.treeview__level.selected .update-node, .treeview__level.selected .add-child, .treeview__level.selected .upgrade-node, .treeview__level.selected .edit-node, .treeview__level.selected .delete-node {
     display: none;
 }
 

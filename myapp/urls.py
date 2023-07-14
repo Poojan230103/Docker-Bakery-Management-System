@@ -3,7 +3,8 @@ from django.urls import path,include
 from myapp import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.homepage_view, name="index"),
+    path("add_child_view", views.add_child_view, name="add_child_view"),
     path("add_child_component", views.add_child_component, name="add_child_component"),
     path("add_child_image", views.add_child_image, name="add_new_image"),
     path("manual_sync_on_image", views.manual_sync_on_image, name="manual_sync_on_image"),

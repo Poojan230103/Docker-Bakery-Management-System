@@ -15,6 +15,7 @@ class treenode:
         self.dockerfile_local_path = None
         self.dockerfile_repo_path = None
         self.repo_name = None
+        self.is_locked = False
         self.created_time = self.last_updated_time = self.last_synced_time = str(datetime.utcnow().replace(microsecond=0))
         self.component_name = None
         self.architecture = "arm" if "arm" in img_name else "intel"
